@@ -1,0 +1,25 @@
+day_number: 75
+stage_name: 长期优化期
+title: 玩具轮换机制建立日
+focus: 建立玩具轮换制度保持新鲜感
+actions:
+  - text: 将玩具分成2-3组
+    reason: 便于轮换
+  - text: 制定玩具轮换计划（如每周轮换）
+    reason: 形成制度
+  - text: 收纳暂时不用的玩具
+    reason: 保持环境整洁
+avoids:
+  - text: 不要让所有玩具一直在外面
+    reason: 会失去新鲜感
+  - text: 不要轮换频率太低
+    reason: 适度轮换效果更好
+observe:
+  - 轮换后猫咪对新玩具的反应
+  - 玩耍积极性是否提高
+risk_tip: 轮换时检查玩具安全性
+shopping_tip: 可准备收纳箱存放轮换玩具
+reassurance: 轮换让老玩具焕发新生机
+followup_questions:
+  - 您打算怎么分组轮换？
+  - 轮换周期定为多久？

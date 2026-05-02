@@ -1,0 +1,25 @@
+day_number: 72
+stage_name: 长期优化期
+title: 猫爬架评估日
+focus: 评估猫咪对垂直空间的需求
+actions:
+  - text: 观察猫咪是否喜欢攀爬
+    reason: 了解攀爬习惯
+  - text: 测量适合放置猫爬架的空间
+    reason: 选择合适尺寸
+  - text: 了解不同类型猫爬架的特点
+    reason: 做好选购准备
+avoids:
+  - text: 不要购买过于占地的猫爬架
+    reason: 需考虑居住空间
+  - text: 不要购买不稳的猫爬架
+    reason: 安全第一
+observe:
+  - 猫咪是否尝试攀爬家具
+  - 对高处的兴趣程度
+risk_tip: 猫爬架需稳固安全，避免倾倒
+shopping_tip: 选择高度适中、底座稳固的猫爬架
+reassurance: 给猫咪高处空间是尊重它的天性
+followup_questions:
+  - 您家里有适合放猫爬架的位置吗？
+  - 猫咪喜欢高处吗？

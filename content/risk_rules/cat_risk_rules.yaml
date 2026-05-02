@@ -1,0 +1,271 @@
+# 猫咪异常风险判断规则库
+# 版本: v1.0
+# 更新日期: 2026-05-01
+
+## 规则格式说明
+
+```yaml
+risk_rule:
+  id: string           # 规则唯一标识
+  condition: string    # 触发条件表达式
+  level: string        # low|medium|high|urgent
+  output: string       # 输出建议
+  observe_duration: string  # 建议观察时长
+  escalate_condition: string # 升级条件
+```
+
+## 规则库
+
+### === 紧急风险 (urgent) ===
+
+# R001: 呼吸异常
+- id: R001
+  condition: breathing_abnormal == true
+  level: urgent
+  output: 呼吸异常（张嘴呼吸、呼吸急促、呼吸声异常）属于高风险信号，建议立即就医。
+  observe_duration: 立即
+  escalate_condition: 无需观察，直接就医
+  tags: [呼吸, 紧急]
+
+# R002: 无法排尿
+- id: R002
+  condition: no_urination == true AND duration_hours >= 24
+  level: urgent
+  output: 24小时以上无法排尿可能是尿道阻塞，属于紧急情况，建议立即就医。公猫尤其高风险。
+  observe_duration: 立即
+  escalate_condition: 无需观察，直接就医
+  tags: [排泄, 紧急, 公猫高危]
+
+# R003: 严重外伤
+- id: R003
+  condition: visible_severe_injury == true OR bleeding_not_stopping == true
+  level: urgent
+  output: 严重外伤或持续出血需要立即就医处理。
+  observe_duration: 立即
+  escalate_condition: 无需观察，直接就医
+  tags: [外伤, 紧急]
+
+# R004: 抽搐/癫痫
+- id: R004
+  condition: seizure == true OR convulsion == true
+  level: urgent
+  output: 抽搐或癫痫发作需要立即就医，记录发作时长和表现。
+  observe_duration: 立即
+  escalate_condition: 无需观察，直接就医
+  tags: [神经, 紧急]
+
+### === 高风险 (high) ===
+
+# R005: 完全不进食超过48小时
+- id: R005
+  condition: eating == none AND duration_hours >= 48
+  level: high
+  output: 猫咪超过48小时完全不进食不应继续等待，可能导致脂肪肝等严重问题，建议尽快联系兽医。
+  observe_duration: 不超过12小时
+  escalate_condition: 60小时仍未进食需立即就医
+  tags: [进食, 高危]
+
+# R006: 完全不排泄超过48小时
+- id: R006
+  condition: no_litter_output == true AND duration_hours >= 48
+  level: high
+  output: 如果超过48小时没有排尿或排便，需要尽快咨询兽医。
+  observe_duration: 12小时
+  escalate_condition: 60小时仍未排泄升级为urgent
+  tags: [排泄, 高危]
+
+# R007: 多次呕吐
+- id: R007
+  condition: vomiting == yes AND vomiting_count >= 3 AND within_hours <= 24
+  level: high
+  output: 24小时内呕吐3次以上需要重视，可能涉及肠胃问题或吞食异物，建议尽快咨询兽医。
+  observe_duration: 不超过12小时
+  escalate_condition: 呕吐物带血或持续不止升级urgent
+  tags: [呕吐, 高危]
+
+# R008: 呕吐物带血
+- id: R008
+  condition: vomiting_blood == true
+  level: high
+  output: 呕吐物中带血是严重信号，建议尽快就医检查。
+  observe_duration: 立即准备就医
+  escalate_condition: 伴有其他不适升级urgent
+  tags: [呕吐, 高危]
+
+# R009: 严重腹泻带血
+- id: R009
+  condition: diarrhea == true AND diarrhea_blood == true
+  level: high
+  output: 腹泻带血可能是严重肠胃问题，建议尽快就医。
+  observe_duration: 立即准备就医
+  escalate_condition: 伴随呕吐或精神萎靡升级urgent
+  tags: [腹泻, 高危]
+
+# R010: 精神极度萎靡
+- id: R010
+  condition: activity == extremely_low AND responsive == false
+  level: high
+  output: 猫咪精神极度萎靡、对外界几乎无反应是严重信号，建议尽快就医。
+  observe_duration: 不超过6小时
+  escalate_condition: 伴随其他异常升级urgent
+  tags: [精神状态, 高危]
+
+### === 中等风险 (medium) ===
+
+# R011: 单次呕吐但精神正常
+- id: R011
+  condition: vomiting == yes AND vomiting_count == 1 AND activity == normal
+  level: medium
+  output: 单次呕吐且精神正常可能是一时不适，加强观察。如24小时内再次呕吐需重视。
+  observe_duration: 24小时
+  escalate_condition: 再次呕吐或精神变差升级high
+  tags: [呕吐, 中危]
+
+# R012: 腹泻超过24小时
+- id: R012
+  condition: diarrhea == yes AND duration_hours >= 24 AND diarrhea_blood == false
+  level: medium
+  output: 腹泻超过24小时应加强观察，并考虑咨询兽医。注意补水。
+  observe_duration: 24小时
+  escalate_condition: 出现血便或加重升级high
+  tags: [腹泻, 中危]
+
+# R013: 食欲明显下降但未停止
+- id: R013
+  condition: eating == low AND duration_hours >= 24 AND eating != none
+  level: medium
+  output: 食欲明显下降但仍有进食需要观察，检查食物是否合适、环境是否有变化。
+  observe_duration: 48小时
+  escalate_condition: 完全停止进食升级high
+  tags: [进食, 中危]
+
+# R014: 频繁打喷嚏
+- id: R014
+  condition: sneezing == frequent AND duration_hours >= 24
+  level: medium
+  output: 频繁打喷嚏超过24小时可能是上呼吸道问题，加强观察。注意是否有眼鼻分泌物。
+  observe_duration: 48小时
+  escalate_condition: 出现呼吸困难升级high
+  tags: [呼吸, 中危]
+
+# R015: 眼鼻分泌物异常
+- id: R015
+  condition: eye_discharge == abnormal OR nose_discharge == abnormal
+  level: medium
+  output: 眼鼻分泌物异常（黄绿色、量大）可能是感染信号，建议观察并考虑就医。
+  observe_duration: 48小时
+  escalate_condition: 伴随发热或呼吸困难升级high
+  tags: [分泌物, 中危]
+
+# R016: 过度抓挠皮肤
+- id: R016
+  condition: scratching == excessive AND duration_days >= 3
+  level: medium
+  output: 过度抓挠可能是皮肤问题或寄生虫，检查皮肤状况并加强观察。
+  observe_duration: 72小时
+  escalate_condition: 出现皮肤破损升级high
+  tags: [皮肤, 中危]
+
+# R017: 乱尿行为
+- id: R017
+  condition: inappropriate_urination == true AND day_number >= 15
+  level: medium
+  output: 乱尿可能涉及行为问题、泌尿问题或猫砂盆问题，需要排查原因。
+  observe_duration: 72小时
+  escalate_condition: 伴随排尿困难升级high
+  tags: [行为, 中危]
+
+### === 低风险 (low) ===
+
+# R018: 适应期躲藏但进食排泄正常
+- id: R018
+  condition: hiding == always AND eating == normal AND litter == normal AND day_number <= 3
+  level: low
+  output: 到家前3天持续躲藏较常见，只要进食和排泄正常，可以继续安静观察。这是适应过程。
+  observe_duration: 续观察3天
+  escalate_condition: 第4天后仍不出来或进食变差升级medium
+  tags: [适应期, 低危]
+
+# R019: 适应期不怎么互动但正常生活
+- id: R019
+  condition: interaction == low AND eating == normal AND litter == normal AND day_number <= 7
+  level: low
+  output: 到家初期互动少是正常的适应过程，只要进食排泄正常，可以慢慢建立信任。
+  observe_duration: 续观察至Day 7
+  escalate_condition: Day 7后仍完全无互动升级medium
+  tags: [适应期, 低危]
+
+# R020: 偶尔打喷嚏
+- id: R020
+  condition: sneezing == occasional AND no_other_symptoms == true
+  level: low
+  output: 偶尔打喷嚏可能是灰尘刺激或一时不适，通常无大碍。注意观察频率变化。
+  observe_duration: 48小时
+  escalate_condition: 变为频繁升级medium
+  tags: [呼吸, 低危]
+
+# R021: 偶尔吐毛球
+- id: R021
+  condition: vomiting == yes AND is_hairball == true AND vomiting_count == 1
+  level: low
+  output: 呕吐毛球是猫咪正常行为，不是疾病。可以喂化毛膏帮助排出。
+  observe_duration: 不需特别观察
+  escalate_condition: 连续呕吐非毛球物质升级medium
+  tags: [呕吐, 低危, 毛球]
+
+# R022: 夜间活动较多
+- id: R022
+  condition: night_activity == high AND day_activity == normal
+  level: low
+  output: 猫咪夜间活跃是天性，不是异常。可以通过白天多互动来调整节奏。
+  observe_duration: 不需特别观察
+  escalate_condition: 伴随其他异常升级
+  tags: [行为, 低危]
+
+# R023: 换粮过渡期软便
+- id: R023
+  condition: stool_soft == true AND in_food_transition == true AND duration_days <= 3
+  level: low
+  output: 换粮过渡期软便较常见，继续按过渡计划进行。如超过3天需重视。
+  observe_duration: 72小时
+  escalate_condition: 软便超过3天或加重升级medium
+  tags: [进食, 低危, 换粮]
+
+---
+
+## 组合判断逻辑
+
+当多个条件同时出现时，风险等级可能叠加：
+
+```python
+def evaluate_risk(status, day_number):
+    # 紧急优先
+    if status.breathing_abnormal:
+        return RiskResult("urgent", "呼吸异常建议立即就医")
+    
+    if status.no_urination and status.no_urination_hours >= 24:
+        return RiskResult("urgent", "无法排尿需立即就医")
+    
+    # 高风险
+    if status.eating == "none" and status.eating_none_hours >= 48:
+        return RiskResult("high", "超过48小时不进食需尽快就医")
+    
+    # 中等风险 - 组合条件
+    if status.vomiting and status.sneezing_frequent:
+        return RiskResult("medium", "呕吐伴随呼吸道症状需关注")
+    
+    # 低风险 - 适应期特殊情况
+    if day_number <= 3 and status.hiding == "always" and status.eating != "none":
+        return RiskResult("low", "适应期躲藏正常，继续观察")
+    
+    # 默认
+    return RiskResult("low", "当前暂无明显高风险信号")
+```
+
+---
+
+## 医疗免责声明模板
+
+所有风险输出必须附带：
+
+> 本建议仅用于养宠日常决策辅助，不能替代兽医诊断。如出现持续不进食、呼吸异常、严重呕吐、无法排尿等情况，请及时就医。

@@ -1,0 +1,25 @@
+day_number: 53
+stage_name: 稳定护理期
+title: 餐具与饮食用品盘点
+focus: 优化猫咪的进食体验
+actions:
+  - text: 检查食盆和水盆的清洁程度和磨损情况
+    reason: 干净的餐具有利于健康
+  - text: 观察猫咪进食姿势，判断餐具高度是否合适
+    reason: 过低或过高都可能影响进食
+  - text: 考虑是否需要添置饮水机或自动喂食器
+    reason: 根据实际需求决定
+avoids:
+  - text: 不要使用塑料餐具
+    reason: 容易滋生细菌，可能引起下巴黑头
+  - text: 不要把食盆放在猫砂盆附近
+    reason: 猫咪不喜欢在厕所附近进食
+observe:
+  - 猫咪进食是否顺畅
+  - 饮水量是否充足
+risk_tip: 长期饮水不足可能导致泌尿系统问题
+shopping_tip: 陶瓷或不锈钢餐具更卫生，饮水机能提高猫咪饮水兴趣
+reassurance: 关注进食细节，能让猫咪更健康快乐！
+followup_questions:
+  - 猫咪的食盆和水盆是什么材质的？
+  - 平时喝水多吗？

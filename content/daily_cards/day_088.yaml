@@ -1,0 +1,25 @@
+day_number: 88
+stage_name: 长期优化期
+title: 猫咪成长记录日
+focus: 记录猫咪这90天的成长变化
+actions:
+  - text: 对比猫咪刚来时和现在的照片
+    reason: 看见成长
+  - text: 记录猫咪的体重、体态变化
+    reason: 追踪健康
+  - text: 记录猫咪行为和性格的变化
+    reason: 了解个体发展
+avoids:
+  - text: 不要忽视细微的进步
+    reason: 每一点都值得记录
+  - text: 不要忘记记录美好的瞬间
+    reason: 这些都是珍贵回忆
+observe:
+  - 猫咪的整体成长
+  - 与您的亲密程度变化
+risk_tip: 成长记录是珍贵的回忆
+shopping_tip: 可制作成长相册
+reassurance: 看着猫咪健康成长，一切都值得
+followup_questions:
+  - 猫咪这90天有哪些明显变化？
+  - 您和猫咪的关系有什么变化？

@@ -1,0 +1,24 @@
+day_number: 65
+stage_name: 长期优化期
+title: 绝育决策日
+focus: 综合信息，做出适合自己的决定
+actions:
+  - text: 回顾这几天收集的信息
+    reason: 梳理思路，形成判断
+  - text: 如已咨询兽医，记录专业建议
+    reason: 医生意见是重要参考
+  - text: 做出决定并记录理由
+    reason: 明确决定，便于后续执行
+avoids:
+  - text: 不要在信息不足时仓促决定
+    reason: 重大决定需要充分依据
+  - text: 不要因他人压力而决定
+    reason: 这是您和猫咪的事，以猫咪福祉为先
+observe:
+  - 自己内心对决定的感受
+risk_tip: 无论决定如何，定期体检都很重要
+shopping_tip: 如决定绝育，可提前准备伊丽莎白圈、术后营养品等
+reassurance: 经过深思熟虑的决定，就是负责任的决定
+followup_questions:
+  - 您做出了什么决定？
+  - 是否需要后续的支持信息？

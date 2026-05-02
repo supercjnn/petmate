@@ -1,0 +1,25 @@
+day_number: 86
+stage_name: 长期优化期
+title: 90天回顾启动日
+focus: 开始系统回顾这90天的养猫历程
+actions:
+  - text: 翻看养猫以来的照片和记录
+    reason: 回顾成长历程
+  - text: 列出这90天最大的变化和收获
+    reason: 看见成长
+  - text: 回想最初的担忧是否已解决
+    reason: 确认进步
+avoids:
+  - text: 不要只看做得不够好的地方
+    reason: 也要肯定自己的付出
+  - text: 不要忘记猫咪的成长
+    reason: 双方都在进步
+observe:
+  - 猫咪现在的状态vs90天前
+  - 您的心态变化
+risk_tip: 回顾是为了更好地前行
+shopping_tip: 可准备相册整理这90天的照片
+reassurance: 您已经坚持了86天，这本身就是成就
+followup_questions:
+  - 这90天印象最深的是什么？
+  - 您觉得自己最大的变化是什么？

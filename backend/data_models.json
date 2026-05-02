@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PetMate MVP Data Models",
+  "version": "1.0.0",
+  "models": {
+    "User": {
+      "type": "object",
+      "required": ["id", "created_at"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "nickname": {"type": "string", "maxLength": 50},
+        "phone": {"type": "string", "pattern": "^\\+?[1-9]\\d{1,14}$"},
+        "email": {"type": "string", "format": "email"},
+        "experience_level": {"type": "string", "enum": ["beginner", "some_experience", "experienced"]},
+        "main_goal": {"type": "string", "enum": ["reduce_anxiety", "save_money", "learn_care", "solve_problem"]},
+        "subscription_status": {"type": "string", "enum": ["free", "paid", "expired"]},
+        "subscription_expire_at": {"type": "string", "format": "date-time"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "CatProfile": {
+      "type": "object",
+      "required": ["id", "user_id", "name", "arrival_date"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "user_id": {"type": "string", "format": "uuid"},
+        "name": {"type": "string", "maxLength": 50},
+        "age_months": {"type": "integer", "minimum": 0, "maximum": 360},
+        "gender": {"type": "string", "enum": ["male", "female", "unknown"]},
+        "arrival_date": {"type": "string", "format": "date"},
+        "source": {"type": "string", "enum": ["adoption", "breeder", "friend", "stray", "pet_shop", "unknown"]},
+        "photo_url": {"type": "string", "format": "uri"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "CatStatusLog": {
+      "type": "object",
+      "required": ["id", "cat_id", "day_number"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "cat_id": {"type": "string", "format": "uuid"},
+        "day_number": {"type": "integer", "minimum": 0, "maximum": 90},
+        "eating": {"type": "string", "enum": ["normal", "low", "none", "unknown"]},
+        "drinking": {"type": "string", "enum": ["normal", "low", "none", "unknown"]},
+        "litter": {"type": "string", "enum": ["normal", "abnormal", "none", "unknown"]},
+        "hiding": {"type": "string", "enum": ["no", "sometimes", "often", "always"]},
+        "activity": {"type": "string", "enum": ["low", "normal", "high", "unknown"]},
+        "vomiting": {"type": "boolean"},
+        "diarrhea": {"type": "boolean"},
+        "sneezing": {"type": "boolean"},
+        "user_note": {"type": "string", "maxLength": 500},
+        "risk_level": {"type": "string", "enum": ["low", "medium", "high", "urgent"]},
+        "created_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "DailyCard": {
+      "type": "object",
+      "required": ["day_number", "stage_id", "title"],
+      "properties": {
+        "day_number": {"type": "integer", "minimum": 0, "maximum": 90},
+        "stage_id": {"type": "string", "enum": ["S0", "S1", "S2", "S3", "S4", "S5"]},
+        "stage_name": {"type": "string"},
+        "title": {"type": "string", "maxLength": 100},
+        "focus": {"type": "string", "maxLength": 200},
+        "actions": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "properties": {
+              "action_id": {"type": "string"},
+              "text": {"type": "string", "maxLength": 100},
+              "reason": {"type": "string", "maxLength": 100}
+            }
+          }
+        },
+        "avoids": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {"type": "string", "maxLength": 100},
+              "reason": {"type": "string", "maxLength": 100}
+            }
+          }
+        },
+        "observe": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 100}
+        },
+        "risk_tip": {"type": "string", "maxLength": 200},
+        "shopping_tip": {"type": "string", "maxLength": 200},
+        "reassurance": {"type": "string", "maxLength": 200},
+        "followup_questions": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 100}
+        }
+      }
+    },
+    "TaskCompletion": {
+      "type": "object",
+      "required": ["id", "user_id", "cat_id", "day_number", "action_id"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "user_id": {"type": "string", "format": "uuid"},
+        "cat_id": {"type": "string", "format": "uuid"},
+        "day_number": {"type": "integer", "minimum": 0, "maximum": 90},
+        "action_id": {"type": "string"},
+        "completed": {"type": "boolean", "default": false},
+        "completed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "RiskCheckResult": {
+      "type": "object",
+      "required": ["level", "analysis"],
+      "properties": {
+        "level": {"type": "string", "enum": ["low", "medium", "high", "urgent"]},
+        "analysis": {"type": "string", "maxLength": 500},
+        "actions": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 200}
+        },
+        "avoids": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 200}
+        },
+        "observe_duration": {"type": "string", "maxLength": 100},
+        "escalate_conditions": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 200}
+        },
+        "disclaimer": {"type": "string", "default": "本建议仅用于养宠日常决策辅助，不能替代兽医诊断。"}
+      }
+    },
+    "AIExplanationRequest": {
+      "type": "object",
+      "required": ["question"],
+      "properties": {
+        "user_id": {"type": "string", "format": "uuid"},
+        "cat_id": {"type": "string", "format": "uuid"},
+        "day_number": {"type": "integer"},
+        "question": {"type": "string", "maxLength": 500},
+        "context": {
+          "type": "object",
+          "properties": {
+            "stage_name": {"type": "string"},
+            "current_status": {"$ref": "#/models/CatStatusLog"},
+            "risk_result": {"$ref": "#/models/RiskCheckResult"}
+          }
+        }
+      }
+    },
+    "AIExplanationResponse": {
+      "type": "object",
+      "required": ["answer"],
+      "properties": {
+        "answer": {"type": "string", "maxLength": 500},
+        "what_to_do": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 100}
+        },
+        "what_not_to_do": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"type": "string", "maxLength": 100}
+        },
+        "when_to_escalate": {"type": "string", "maxLength": 200},
+        "disclaimer": {"type": "string"}
+      }
+    }
+  },
+  "enums": {
+    "RiskLevel": ["low", "medium", "high", "urgent"],
+    "StageId": ["S0", "S1", "S2", "S3", "S4", "S5"],
+    "EatingStatus": ["normal", "low", "none", "unknown"],
+    "SubscriptionStatus": ["free", "paid", "expired"]
+  }
+}

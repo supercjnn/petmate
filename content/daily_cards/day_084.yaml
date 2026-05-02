@@ -1,0 +1,25 @@
+day_number: 84
+stage_name: 长期优化期
+title: 健康监测习惯固化日
+focus: 建立日常健康监测习惯
+actions:
+  - text: 每日观察猫咪精神状态和食欲
+    reason: 及时发现问题
+  - text: 每周称重并记录
+    reason: 监控体重变化
+  - text: 每月检查耳朵、牙齿、皮肤
+    reason: 全面健康管理
+avoids:
+  - text: 不要忽视细小的异常
+    reason: 早发现早处理
+  - text: 不要过度焦虑
+    reason: 保持理性观察
+observe:
+  - 猫咪的日常状态基线
+  - 任何异常表现
+risk_tip: 定期健康监测是预防疾病的关键
+shopping_tip: 可准备宠物体重秤
+reassurance: 健康监测让您更了解猫咪
+followup_questions:
+  - 您会观察哪些健康指标？
+  - 有没有发现过异常？

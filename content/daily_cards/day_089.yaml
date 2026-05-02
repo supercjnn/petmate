@@ -1,0 +1,25 @@
+day_number: 89
+stage_name: 长期优化期
+title: 未来规划制定日
+focus: 规划90天后的长期养护方向
+actions:
+  - text: 列出未来一年需要关注的事项
+    reason: 提前规划
+  - text: 制定年度体检和疫苗计划
+    reason: 健康管理
+  - text: 设定未来想学习和提升的方向
+    reason: 持续成长
+avoids:
+  - text: 不要设定过于宏大的目标
+    reason: 可执行最重要
+  - text: 不要忘记预留弹性
+    reason: 生活总有变化
+observe:
+  - 猫咪未来可能的需求
+  - 自己的精力和时间
+risk_tip: 规划需要根据实际情况调整
+shopping_tip: 可购买猫咪健康管理手册
+reassurance: 有规划的未来更安心
+followup_questions:
+  - 您为未来制定了哪些计划？
+  - 有什么长期目标？

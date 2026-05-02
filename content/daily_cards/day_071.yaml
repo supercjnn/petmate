@@ -1,0 +1,25 @@
+day_number: 71
+stage_name: 长期优化期
+title: 环境丰富化启动日
+focus: 开始规划猫咪的生活环境升级
+actions:
+  - text: 观察猫咪目前的活动空间
+    reason: 了解现状
+  - text: 列出猫咪喜欢的活动区域
+    reason: 识别高价值区域
+  - text: 了解环境丰富化的概念和意义
+    reason: 建立认知基础
+avoids:
+  - text: 不要一次性购买大量用品
+    reason: 需先了解猫咪偏好
+  - text: 不要忽视垂直空间的利用
+    reason: 猫咪喜欢高处
+observe:
+  - 猫咪平时喜欢待在哪里
+  - 是否有无聊的表现
+risk_tip: 环境单调可能导致行为问题
+shopping_tip: 暂无购物需求，先规划再行动
+reassurance: 环境丰富化让猫咪生活更有质量
+followup_questions:
+  - 您的居住空间大概多大？
+  - 猫咪平时最喜欢待在哪个位置？

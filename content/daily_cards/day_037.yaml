@@ -1,0 +1,25 @@
+day_number: 37
+stage_name: 稳定护理期
+title: 体内驱虫计划
+focus: 建立体内驱虫的节奏
+actions:
+  - text: 根据猫咪年龄确定驱虫频率（幼猫更频繁）
+    reason: 不同年龄驱虫节奏不同
+  - text: 选择合适的体内驱虫药，学习正确喂药方法
+    reason: 正确喂药才能发挥效果
+  - text: 将驱虫日期加入日历提醒
+    reason: 养成定期驱虫的习惯
+avoids:
+  - text: 不要在猫咪腹泻时进行驱虫
+    reason: 可能加重肠胃负担
+  - text: 不要擅自增加驱虫药剂量
+    reason: 过量可能造成中毒
+observe:
+  - 驱虫后粪便中是否有虫体排出
+  - 驱虫后食欲和精神状态
+risk_tip: 如发现粪便中有活虫或虫卵，说明体内寄生虫较多，需按医嘱处理
+shopping_tip: 体内驱虫药可选滴剂或片剂，片剂效果强但喂药难度大
+reassurance: 定期驱虫是负责任养宠的体现，你很棒！
+followup_questions:
+  - 你选择的体内驱虫药是滴剂还是片剂？
+  - 猫咪的年龄现在是多少？

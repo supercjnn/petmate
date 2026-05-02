@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-petmate-primary: #FF6B6B;
+  --color-petmate-secondary: #4ECDC4;
+  --color-petmate-accent: #FFE66D;
+  --color-petmate-bg: #FFF8E7;
+  --color-petmate-light: #FFF5E6;
+  --color-petmate-text: #5D4037;
+}
+
+body {
+  background-color: var(--color-petmate-bg);
+  color: var(--color-petmate-text);
+}
+
+.btn-primary {
+  @apply bg-petmate-primary text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition;
+}
+
+.stage-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.risk-low { @apply bg-green-100 text-green-700; }
+.risk-medium { @apply bg-yellow-100 text-yellow-700; }
+.risk-high { @apply bg-orange-100 text-orange-700; }
+.risk-urgent { @apply bg-red-100 text-red-700; }

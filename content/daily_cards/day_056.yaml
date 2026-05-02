@@ -1,0 +1,25 @@
+day_number: 56
+stage_name: 稳定护理期
+title: 护理系统整理日
+focus: 整合所有护理内容，形成系统
+actions:
+  - text: 汇总已建立的护理习惯：喂养、清洁、观察、互动
+    reason: 系统化让护理更高效
+  - text: 制作一份日常护理清单
+    reason: 清单防止遗漏，帮助养成习惯
+  - text: 确定每周和每月的固定护理任务
+    reason: 固定节奏让长期坚持更容易
+avoids:
+  - text: 不要只做临时性的护理
+    reason: 缺乏系统容易遗漏重要事项
+  - text: 不要把清单做得太复杂
+    reason: 复杂的系统难以坚持
+observe:
+  - 目前已养成的护理习惯
+  - 还有哪些环节可以优化
+risk_tip: 疫苗和驱虫时间容易遗忘，务必纳入提醒系统
+shopping_tip: 可使用手机备忘录或专门的宠物管理APP记录护理事项
+reassurance: 有系统的护理让你更从容，猫咪也更健康！
+followup_questions:
+  - 你觉得目前护理工作中有哪些做得特别好？
+  - 有没有需要改进的地方？

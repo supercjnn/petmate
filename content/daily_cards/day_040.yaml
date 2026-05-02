@@ -1,0 +1,25 @@
+day_number: 40
+stage_name: 稳定护理期
+title: 驱虫节奏总结
+focus: 固化驱虫习惯，形成长期计划
+actions:
+  - text: 整理驱虫时间表，体内体外分别记录
+    reason: 清晰的时间表避免遗漏
+  - text: 设置下次驱虫的手机提醒
+    reason: 自动提醒让定期驱虫更轻松
+  - text: 了解与疫苗的时间间隔要求
+    reason: 驱虫和疫苗需错开进行
+avoids:
+  - text: 不要忘记记录每次驱虫的信息
+    reason: 完整记录是健康管理的基础
+  - text: 不要超过推荐间隔时间太久
+    reason: 驱虫效果会减弱
+observe:
+  - 驱虫后猫咪整体状态
+  - 有无出现驱虫相关的不良反应
+risk_tip: 若猫咪生活环境有变化（如外出增多），可能需要调整驱虫频率
+shopping_tip: 可以批量购买驱虫药备用，注意保质期
+reassurance: 驱虫规划完成，你已经建立了重要的护理习惯！
+followup_questions:
+  - 你设置的下次驱虫提醒是什么时候？
+  - 有没有觉得自己越来越专业了？

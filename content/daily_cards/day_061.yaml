@@ -1,0 +1,25 @@
+day_number: 61
+stage_name: 长期优化期
+title: 绝育认知开启日
+focus: 了解绝育的基本概念和常见问题
+actions:
+  - text: 搜索权威资料了解猫咪绝育的基本知识
+    reason: 建立认知基础，避免信息偏差
+  - text: 记录猫咪当前年龄和体重
+    reason: 为后续咨询兽医提供基础数据
+  - text: 写下自己对绝育的疑问清单
+    reason: 理清思路，便于后续咨询
+avoids:
+  - text: 不要根据网络片面信息做决定
+    reason: 每只猫情况不同，需专业评估
+  - text: 不要焦虑或急于决定
+    reason: 绝育是重要决策，需充分了解
+observe:
+  - 猫咪目前的生殖器官发育情况
+  - 是否有发情迹象
+risk_tip: 绝育决策需结合猫咪个体情况，请务必咨询专业兽医
+shopping_tip: 暂无购物需求，今天专注信息收集
+reassurance: 今天只是了解阶段，不需要立刻做任何决定，慢慢来
+followup_questions:
+  - 您对绝育最大的顾虑是什么？
+  - 猫咪现在多大了？

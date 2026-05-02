@@ -1,0 +1,25 @@
+day_number: 67
+stage_name: 长期优化期
+title: 主食选择评估日
+focus: 评估当前主食是否适合长期喂养
+actions:
+  - text: 查看当前主食的营养成分表
+    reason: 了解营养价值
+  - text: 了解干粮、湿粮、冻干、生骨肉的优缺点
+    reason: 拓宽选择视野
+  - text: 根据猫咪情况思考最优方案
+    reason: 制定个性化计划
+avoids:
+  - text: 不要被营销宣传误导
+    reason: 需要看成分而非广告
+  - text: 不要频繁更换主食品牌
+    reason: 稳定的主食更利于消化
+observe:
+  - 猫咪对当前主食的接受度
+  - 粪便状态是否正常
+risk_tip: 更换主食需7-10天过渡期
+shopping_tip: 可研究口碑较好的主食品牌，暂不急于购买
+reassurance: 适合自己的才是最好的，不必追求最贵的
+followup_questions:
+  - 您了解到的主食选择有哪些？
+  - 猫咪目前主食是什么类型？

@@ -1,0 +1,25 @@
+day_number: 79
+stage_name: 长期优化期
+title: 猫咪气味领地检查日
+focus: 了解和优化猫咪的气味领地
+actions:
+  - text: 观察猫咪蹭的地方
+    reason: 了解领地标记行为
+  - text: 保留猫咪标记的气味区域
+    reason: 维护领地感
+  - text: 避免过度清洁猫咪常待的区域
+    reason: 保留熟悉气味
+avoids:
+  - text: 不要频繁彻底清洁猫咪窝垫
+    reason: 会清除领地气味
+  - text: 不要用刺激性清洁剂
+    reason: 可能让猫咪不安
+observe:
+  - 猫咪蹭人、蹭家具的频率
+  - 对新物品的接受度
+risk_tip: 气味是猫咪安全感的来源之一
+shopping_tip: 可准备猫咪费洛蒙辅助缓解压力
+reassurance: 尊重猫咪的领地天性
+followup_questions:
+  - 您注意到猫咪喜欢蹭哪里吗？
+  - 清洁频率是怎样的？

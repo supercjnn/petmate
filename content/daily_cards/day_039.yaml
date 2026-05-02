@@ -1,0 +1,25 @@
+day_number: 39
+stage_name: 稳定护理期
+title: 驱虫日实战
+focus: 顺利完成当天的驱虫任务
+actions:
+  - text: 确认猫咪身体状况良好，适合驱虫
+    reason: 生病期间不宜驱虫
+  - text: 按照说明书剂量准确喂药或滴药
+    reason: 剂量准确是安全和效果的前提
+  - text: 记录本次驱虫日期和药物名称
+    reason: 便于下次参考和追查问题
+avoids:
+  - text: 不要在猫咪空腹时喂驱虫药
+    reason: 可能引起肠胃不适
+  - text: 不要同时使用多种驱虫产品
+    reason: 可能造成药物过量
+observe:
+  - 喂药后有无呕吐
+  - 滴药部位皮肤有无刺激反应
+risk_tip: 驱虫后出现轻微软便属正常，持续腹泻需咨询医生
+shopping_tip: 准备一些零食或猫条作为喂药后的奖励
+reassurance: 驱虫完成，猫咪又多了一份健康保障！
+followup_questions:
+  - 驱虫过程顺利吗？
+  - 猫咪有没有抗拒的表现？

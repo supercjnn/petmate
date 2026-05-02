@@ -1,0 +1,25 @@
+day_number: 82
+stage_name: 长期优化期
+title: 喂养习惯固化日
+focus: 建立稳定的喂养习惯
+actions:
+  - text: 确定每日固定喂养时间
+    reason: 形成规律
+  - text: 建立喂食前的检查习惯（碗是否干净等）
+    reason: 保证卫生
+  - text: 记录每次喂食的分量
+    reason: 控制食量
+avoids:
+  - text: 不要忽早忽晚喂食
+    reason: 破坏规律性
+  - text: 不要忘记换新鲜水
+    reason: 饮水很重要
+observe:
+  - 猫咪对喂食时间的预期
+  - 进食习惯
+risk_tip: 固定时间喂食有助于消化系统健康
+shopping_tip: 可考虑自动喂食器辅助
+reassurance: 稳定的喂养习惯让您和猫咪都有节奏
+followup_questions:
+  - 您定的喂食时间是？
+  - 执行起来有困难吗？

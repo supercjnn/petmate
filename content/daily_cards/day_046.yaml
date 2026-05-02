@@ -1,0 +1,25 @@
+day_number: 46
+stage_name: 稳定护理期
+title: 排便观察日
+focus: 学会通过粪便判断猫咪健康
+actions:
+  - text: 了解健康猫咪粪便的标准形态（成型、不软不硬、深棕色）
+    reason: 粪便是健康的重要指示器
+  - text: 学习识别软便、腹泻、便秘、血便的特征
+    reason: 不同问题对应不同原因
+  - text: 偶尔检查猫砂盆，留意粪便变化
+    reason: 不必过度检查，但要心中有数
+avoids:
+  - text: 不要忽视持续的排便异常
+    reason: 可能是消化系统或其他疾病的信号
+  - text: 不要频繁更换猫粮导致肠胃不适
+    reason: 突然换粮是软便常见原因
+observe:
+  - 粪便形态是否正常
+  - 排便频率有无变化
+risk_tip: 血便、持续腹泻或超过3天不排便需及时就医
+shopping_tip: 可以备一些益生菌，帮助调理肠胃
+reassurance: 关注排便情况是负责任的表现，不要觉得尴尬！
+followup_questions:
+  - 最近猫砂盆里的情况怎么样？
+  - 有没有发现异常？

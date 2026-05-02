@@ -1,0 +1,25 @@
+day_number: 43
+stage_name: 稳定护理期
+title: 耳朵检查日
+focus: 学习检查和护理猫咪耳朵
+actions:
+  - text: 轻轻翻开猫咪耳朵，观察耳道内部
+    reason: 耳道健康容易被忽视
+  - text: 了解正常耳垢和耳螨的区别
+    reason: 区分正常与异常
+  - text: 学习正确清洁耳朵的方法和频率
+    reason: 过度清洁也会造成问题
+avoids:
+  - text: 不要用棉签深入耳道内部
+    reason: 可能把污垢推得更深或伤害耳膜
+  - text: 不要频繁掏耳朵
+    reason: 猫咪耳朵有自洁功能
+observe:
+  - 耳朵内部颜色是否正常（淡粉色）
+  - 有无黑色颗粒或异味
+risk_tip: 若猫咪频繁甩头、抓耳朵，可能是有耳螨或耳道炎症
+shopping_tip: 耳垢多时可使用宠物专用洗耳液，温和清洁
+reassurance: 定期检查耳朵能预防很多问题，你的细心值得表扬！
+followup_questions:
+  - 猫咪有没有经常摇头或抓耳朵？
+  - 耳朵内部看起来干净吗？

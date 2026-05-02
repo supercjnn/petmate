@@ -1,0 +1,25 @@
+day_number: 59
+stage_name: 稳定护理期
+title: 护理技能复习
+focus: 回顾和巩固已掌握的护理技能
+actions:
+  - text: 复习这段时间学习的关键护理技能
+    reason: 巩固记忆，确保掌握
+  - text: 针对自己薄弱的环节进行加强学习
+    reason: 补足短板
+  - text: 整理一份"猫咪护理速查手册"
+    reason: 方便日后快速查阅
+avoids:
+  - text: 不要停留在理论层面，要实际操作
+    reason: 熟练需要练习
+  - text: 不要忽视自己不擅长的护理环节
+    reason: 每个环节都很重要
+observe:
+  - 自己护理技能的熟练程度
+  - 还有哪些需要提升的地方
+risk_tip: 不确定的操作宁可咨询医生，不要盲目尝试
+shopping_tip: 无需购买，重点是整理已有知识
+reassurance: 你已经掌握了很多专业的护理技能，为自己骄傲吧！
+followup_questions:
+  - 你觉得自己最擅长的是哪方面的护理？
+  - 有没有觉得比较难掌握的技能？

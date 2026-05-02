@@ -1,0 +1,25 @@
+day_number: 81
+stage_name: 长期优化期
+title: 养猫习惯系统启动日
+focus: 开始梳理长期养猫的习惯系统
+actions:
+  - text: 列出目前每天必做的养猫事项
+    reason: 了解现有习惯
+  - text: 标注哪些习惯已稳定，哪些还偶尔忘记
+    reason: 识别薄弱环节
+  - text: 思考如何让习惯更自动化
+    reason: 降低执行难度
+avoids:
+  - text: 不要制定过于复杂的系统
+    reason: 简单才可持续
+  - text: 不要一次改变太多
+    reason: 循序渐进
+observe:
+  - 目前养猫习惯的执行情况
+  - 最容易忘记的事项
+risk_tip: 习惯系统需要时间建立
+shopping_tip: 可使用习惯追踪APP辅助
+reassurance: 好的习惯系统让养猫更轻松
+followup_questions:
+  - 您目前每天必做哪些事？
+  - 哪些事最容易忘记？

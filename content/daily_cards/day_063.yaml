@@ -1,0 +1,25 @@
+day_number: 63
+stage_name: 长期优化期
+title: 绝育时机了解日
+focus: 了解绝育的常见时机和影响因素
+actions:
+  - text: 了解不同年龄段绝育的特点
+    reason: 年龄是重要考量因素
+  - text: 了解公猫和母猫绝育的差别
+    reason: 性别不同，方案也有差异
+  - text: 记录自家猫咪可能适合的时间窗口
+    reason: 为实际安排做准备
+avoids:
+  - text: 不要照搬别人的时间表
+    reason: 每只猫发育情况不同
+  - text: 不要在猫咪健康不佳时考虑手术
+    reason: 需确保身体状况良好
+observe:
+  - 猫咪是否已达到常见绝育年龄
+  - 体重和健康状态是否稳定
+risk_tip: 具体时机需兽医根据猫咪个体情况评估
+shopping_tip: 暂无购物需求
+reassurance: 您正在系统性地了解，这是做决定的正确方式
+followup_questions:
+  - 猫咪现在大概多大？
+  - 您倾向于在什么时间考虑这件事？

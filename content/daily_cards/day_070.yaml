@@ -1,0 +1,25 @@
+day_number: 70
+stage_name: 长期优化期
+title: 饮食计划定型日
+focus: 形成可执行的长期饮食计划
+actions:
+  - text: 制定一周饮食计划表
+    reason: 形成规律喂养习惯
+  - text: 记录每日喂食时间和分量
+    reason: 建立稳定的喂养节奏
+  - text: 设定定期评估饮食效果的时间
+    reason: 持续优化饮食方案
+avoids:
+  - text: 不要过度追求完美
+    reason: 实际执行比完美计划更重要
+  - text: 不要因忙碌就随意喂食
+    reason: 保持规律性
+observe:
+  - 猫咪对饮食计划的适应情况
+  - 体重和精神状态
+risk_tip: 饮食计划需根据猫咪状态动态调整
+shopping_tip: 可批量购买主食，确保供应稳定
+reassurance: 有计划的喂养让养猫生活更有序
+followup_questions:
+  - 您制定的饮食计划是怎样的？
+  - 执行起来有困难吗？

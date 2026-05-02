@@ -1,0 +1,25 @@
+day_number: 44
+stage_name: 稳定护理期
+title: 口腔检查日
+focus: 关注猫咪口腔和牙齿健康
+actions:
+  - text: 尝试轻轻翻开猫咪嘴唇，观察牙齿和牙龈
+    reason: 口腔问题在猫咪中很常见
+  - text: 了解牙龈红肿、口臭、牙结石的迹象
+    reason: 口腔问题影响进食和全身健康
+  - text: 了解猫咪刷牙的可能性和替代方案
+    reason: 口腔护理有多种方式
+avoids:
+  - text: 不要强行检查猫咪嘴巴
+    reason: 可能被咬伤，也会造成猫咪恐惧
+  - text: 不要使用人用牙膏
+    reason: 含有对猫咪有害的成分
+observe:
+  - 牙龈颜色是否正常（粉色，不红肿）
+  - 有无明显的牙结石或口臭
+risk_tip: 严重的口腔问题可能导致进食困难，需及时处理
+shopping_tip: 可以尝试猫咪专用洁牙零食或漱口水作为日常护理
+reassurance: 口腔护理从小事做起，你已经迈出第一步了！
+followup_questions:
+  - 猫咪有没有口臭的情况？
+  - 平时有没有喂洁牙零食？

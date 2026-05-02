@@ -1,0 +1,25 @@
+day_number: 76
+stage_name: 长期优化期
+title: 互动游戏深化日
+focus: 提升与猫咪互动游戏的质量
+actions:
+  - text: 学习逗猫棒的正确使用方法
+    reason: 提高游戏吸引力
+  - text: 每天15分钟专注互动游戏时间
+    reason: 建立规律互动
+  - text: 观察猫咪最兴奋的游戏方式
+    reason: 了解个体偏好
+avoids:
+  - text: 不要用手脚直接逗猫
+    reason: 避免养成咬人习惯
+  - text: 不要在猫咪不想玩时强迫
+    reason: 尊重猫咪意愿
+observe:
+  - 猫咪在游戏中是否满足
+  - 游戏后的休息情况
+risk_tip: 游戏需适度，避免过度疲劳
+shopping_tip: 准备不同类型的逗猫棒
+reassurance: 优质互动游戏增进感情，消耗精力
+followup_questions:
+  - 您平时怎么和猫咪玩耍？
+  - 猫咪喜欢什么游戏方式？

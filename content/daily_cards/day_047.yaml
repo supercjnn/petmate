@@ -1,0 +1,25 @@
+day_number: 47
+stage_name: 稳定护理期
+title: 体重监测日
+focus: 建立定期称重的习惯
+actions:
+  - text: 给猫咪称重并记录体重
+    reason: 体重变化是健康的重要指标
+  - text: 了解猫咪的理想体重范围
+    reason: 不同体型标准不同
+  - text: 设置每月固定时间称重
+    reason: 定期监测才能发现趋势
+avoids:
+  - text: 不要忽视体重的突然变化
+    reason: 可能是健康问题的信号
+  - text: 不要用人类审美评判猫咪胖瘦
+    reason: 过胖对猫咪健康不利
+observe:
+  - 体重是否稳定
+  - 身体是否有明显的胖瘦变化
+risk_tip: 猫咪体重短期内明显下降或上升都需关注
+shopping_tip: 家用宠物秤或普通体重秤（抱着猫咪称再减去自己体重）都可以
+reassurance: 定期称重是科学养宠的好习惯！
+followup_questions:
+  - 猫咪现在体重是多少？
+  - 和上次相比有变化吗？

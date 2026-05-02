@@ -1,0 +1,25 @@
+day_number: 54
+stage_name: 稳定护理期
+title: 猫窝与休息区优化
+focus: 打造猫咪舒适的休息空间
+actions:
+  - text: 观察猫咪最喜欢睡觉的地方
+    reason: 了解猫咪偏好，优化休息空间
+  - text: 检查猫窝是否干净舒适
+    reason: 卫生影响健康和睡眠质量
+  - text: 根据季节调整休息区的温度和遮光
+    reason: 不同季节需求不同
+avoids:
+  - text: 不要强迫猫咪睡在你准备的猫窝
+    reason: 猫咪有自己的喜好
+  - text: 不要把休息区放在嘈杂的地方
+    reason: 猫咪需要安静的睡眠环境
+observe:
+  - 猫咪最常选择的睡觉位置
+  - 睡眠时的放松程度
+risk_tip: 猫咪长期睡在通风口或阳光直射处可能影响健康
+shopping_tip: 可以多准备几个不同类型的窝（纸箱、软垫、吊床），让猫咪选择
+reassurance: 了解猫咪的偏好，才能给它最好的！
+followup_questions:
+  - 猫咪平时喜欢睡哪里？
+  - 有没有专门给猫咪准备的窝？

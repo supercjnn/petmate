@@ -1,0 +1,25 @@
+day_number: 69
+stage_name: 长期优化期
+title: 零食管理规划日
+focus: 建立健康的零食喂养规则
+actions:
+  - text: 盘点目前给猫咪的零食种类和频率
+    reason: 了解零食摄入情况
+  - text: 制定零食喂养规则（如每日限量）
+    reason: 避免过度喂食
+  - text: 选择更健康的零食替代品
+    reason: 零食也可以有营养
+avoids:
+  - text: 不要无限制地给零食
+    reason: 避免挑食和肥胖
+  - text: 不要用零食代替主食
+    reason: 营养会不均衡
+observe:
+  - 猫咪是否因零食而挑食
+  - 零食占总进食量的比例
+risk_tip: 零食摄入过多可能导致肥胖和挑食
+shopping_tip: 可选择冻干肉类等较健康的零食
+reassurance: 零食不是禁区，合理控制就好
+followup_questions:
+  - 您平时给零食的频率是怎样的？
+  - 猫咪最喜欢什么零食？

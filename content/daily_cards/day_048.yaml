@@ -1,0 +1,25 @@
+day_number: 48
+stage_name: 稳定护理期
+title: 爪子与足部检查
+focus: 关注猫咪爪子和肉垫健康
+actions:
+  - text: 轻轻触摸猫咪爪子，检查肉垫有无伤口
+    reason: 肉垫问题容易被忽视
+  - text: 观察指甲长度，判断是否需要修剪
+    reason: 过长指甲可能影响行走或勾住物品
+  - text: 学习检查肉垫有无异物刺入
+    reason: 猫咪外出或家里可能有异物
+avoids:
+  - text: 不要在猫咪抗拒时强行检查爪子
+    reason: 可能被抓伤，也让猫咪产生负面联想
+  - text: 不要剪到指甲里的粉色部分（血线）
+    reason: 会出血并造成疼痛
+observe:
+  - 肉垫颜色是否正常，有无伤口
+  - 指甲是否过长
+risk_tip: 若肉垫有异物刺入，不要硬拔，建议就医处理
+shopping_tip: 准备猫咪专用指甲剪，修剪时更加安全
+reassurance: 你在细致地照顾猫咪的每个部位，真用心！
+followup_questions:
+  - 猫咪有抓挠家具的情况吗？
+  - 之前有给猫咪剪过指甲吗？

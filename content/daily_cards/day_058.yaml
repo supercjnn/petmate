@@ -1,0 +1,25 @@
+day_number: 58
+stage_name: 稳定护理期
+title: 年度计划制定
+focus: 规划猫咪的年度护理安排
+actions:
+  - text: 根据猫咪年龄，制定年度体检计划
+    reason: 定期体检是健康保障
+  - text: 将疫苗和驱虫纳入年度日历
+    reason: 定期提醒避免遗忘
+  - text: 预估年度护理预算
+    reason: 经济规划让护理可持续
+avoids:
+  - text: 不要因为没有明显问题就跳过体检
+    reason: 猫咪善于隐藏疾病，体检能早发现早治疗
+  - text: 不要超出自己的经济能力
+    reason: 合理规划，量力而行
+observe:
+  - 猫咪目前的健康状况
+  - 未来可能需要的护理投入
+risk_tip: 老年猫（7岁以上）建议每半年体检一次
+shopping_tip: 可考虑购买宠物医疗保险，分摊医疗风险
+reassurance: 提前规划让你和猫咪的生活更有序！
+followup_questions:
+  - 猫咪下一次体检打算什么时候做？
+  - 有没有考虑过宠物保险？

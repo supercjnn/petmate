@@ -1,0 +1,25 @@
+day_number: 87
+stage_name: 长期优化期
+title: 养猫技能盘点日
+focus: 盘点这90天学会的养猫技能
+actions:
+  - text: 列出学会的养猫知识和技能
+    reason: 确认成长
+  - text: 标出还需加强的方面
+    reason: 明确方向
+  - text: 记录有用的信息来源
+    reason: 整理资源
+avoids:
+  - text: 不要低估自己的进步
+    reason: 每一点都很重要
+  - text: 不要停止学习
+    reason: 养猫是持续学习的过程
+observe:
+  - 自己处理问题的能力提升
+  - 对猫咪的理解加深
+risk_tip: 保持学习的心态
+shopping_tip: 可整理养猫笔记或手册
+reassurance: 您已经掌握了基础养猫技能，很有进步
+followup_questions:
+  - 您觉得学到了哪些重要技能？
+  - 还有什么想深入了解的？

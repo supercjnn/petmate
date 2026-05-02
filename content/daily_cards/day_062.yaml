@@ -1,0 +1,24 @@
+day_number: 62
+stage_name: 长期优化期
+title: 绝育利弊梳理日
+focus: 客观了解绝育的潜在好处和风险
+actions:
+  - text: 整理绝育的潜在好处（如减少某些疾病风险等）
+    reason: 全面了解正面影响
+  - text: 整理绝育的潜在风险和注意事项
+    reason: 全面了解可能的顾虑
+  - text: 记录自己能接受和担忧的点
+    reason: 明确个人立场便于后续决策
+avoids:
+  - text: 不要只看单方面信息
+    reason: 需要平衡了解利弊
+  - text: 不要被极端案例影响判断
+    reason: 个案不代表普遍情况
+observe:
+  - 猫咪是否有异常行为可能与生殖系统相关
+risk_tip: 所有医学信息仅供参考，请以兽医专业意见为准
+shopping_tip: 暂无购物需求
+reassurance: 了解利弊是负责任的表现，这说明您很在乎猫咪
+followup_questions:
+  - 整理后您觉得好处多还是顾虑多？
+  - 有没有特别担心的问题？

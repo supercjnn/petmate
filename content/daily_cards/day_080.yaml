@@ -1,0 +1,25 @@
+day_number: 80
+stage_name: 长期优化期
+title: 环境丰富化总结日
+focus: 回顾并完善环境优化成果
+actions:
+  - text: 检查环境丰富化的实施情况
+    reason: 确认完成度
+  - text: 观察猫咪行为是否有积极变化
+    reason: 评估效果
+  - text: 列出后续可以改进的地方
+    reason: 持续优化
+avoids:
+  - text: 不要急于求成
+    reason: 环境优化是长期过程
+  - text: 不要忽视猫咪的反馈
+    reason: 以猫咪需求为准
+observe:
+  - 猫咪活动量是否增加
+  - 精神状态是否更好
+risk_tip: 持续观察，适时调整
+shopping_tip: 可根据需求补充用品
+reassurance: 环境优化让猫咪生活更丰富
+followup_questions:
+  - 这段时间做了哪些环境改变？
+  - 猫咪的反应如何？

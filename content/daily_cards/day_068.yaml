@@ -1,0 +1,25 @@
+day_number: 68
+stage_name: 长期优化期
+title: 饮水量关注日
+focus: 重视猫咪饮水健康
+actions:
+  - text: 观察猫咪每日饮水量
+    reason: 了解实际饮水情况
+  - text: 了解猫咪饮水量不足的风险
+    reason: 认识饮水的重要性
+  - text: 尝试增加饮水的方法（如流动水、多放水碗等）
+    reason: 促进健康饮水习惯
+avoids:
+  - text: 不要忽视饮水量问题
+    reason: 饮水不足可能导致健康问题
+  - text: 不要让水碗长期不换水
+    reason: 新鲜水更吸引猫咪
+observe:
+  - 猫咪每天喝多少水
+  - 是否喜欢流动水
+risk_tip: 长期饮水不足可能影响泌尿健康
+shopping_tip: 可考虑宠物饮水机，增加饮水吸引力
+reassurance: 关注饮水是关爱猫咪健康的体现
+followup_questions:
+  - 猫咪平时喜欢喝水吗？
+  - 您尝试过哪些增加饮水的方法？

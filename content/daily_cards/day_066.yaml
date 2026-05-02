@@ -1,0 +1,25 @@
+day_number: 66
+stage_name: 长期优化期
+title: 长期饮食规划启动日
+focus: 开始思考猫咪的长期饮食结构
+actions:
+  - text: 盘点目前猫咪的主食和零食种类
+    reason: 了解当前饮食结构
+  - text: 记录猫咪的进食习惯和偏好
+    reason: 掌握个体特点
+  - text: 了解猫的基本营养需求
+    reason: 建立科学的营养认知
+avoids:
+  - text: 不要突然大量更换食物
+    reason: 避免肠胃不适
+  - text: 不要只凭猫咪喜好选择食物
+    reason: 需要兼顾营养均衡
+observe:
+  - 猫咪目前的体重和体态
+  - 进食量和饮水量
+risk_tip: 饮食调整需循序渐进，避免肠胃问题
+shopping_tip: 暂无购物需求，先了解现状
+reassurance: 好的饮食规划是长期健康的基石，今天开始刚刚好
+followup_questions:
+  - 猫咪目前主食是什么？
+  - 有没有挑食的习惯？

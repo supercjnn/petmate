@@ -1,0 +1,25 @@
+day_number: 85
+stage_name: 长期优化期
+title: 养猫习惯系统定型日
+focus: 整合形成完整的养猫习惯系统
+actions:
+  - text: 汇总所有养猫习惯形成清单
+    reason: 形成系统
+  - text: 制作养猫日常检查表
+    reason: 便于执行
+  - text: 设定习惯系统的复盘周期
+    reason: 持续优化
+avoids:
+  - text: 不要让系统过于复杂
+    reason: 简单才能坚持
+  - text: 不要没有弹性
+    reason: 允许偶尔的变动
+observe:
+  - 整个系统的执行难度
+  - 是否有遗漏的事项
+risk_tip: 系统需要定期维护和调整
+shopping_tip: 可打印或电子保存检查表
+reassurance: 完整的习惯系统让养猫更从容
+followup_questions:
+  - 您的养猫习惯系统包括哪些内容？
+  - 觉得能坚持下来吗？

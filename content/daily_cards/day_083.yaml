@@ -1,0 +1,25 @@
+day_number: 83
+stage_name: 长期优化期
+title: 清洁习惯固化日
+focus: 建立稳定的清洁习惯
+actions:
+  - text: 制定猫砂盆清洁计划（每日至少一次）
+    reason: 保持卫生
+  - text: 制定食盆水盆清洁计划
+    reason: 防止细菌滋生
+  - text: 制定环境清洁计划（如每周大扫除）
+    reason: 整体环境卫生
+avoids:
+  - text: 不要忽视猫砂盆清洁
+    reason: 脏砂盆会导致猫咪乱尿
+  - text: 不要使用刺激性清洁剂
+    reason: 可能伤害猫咪
+observe:
+  - 清洁后猫咪的反应
+  - 是否有异味
+risk_tip: 猫砂盆不洁可能导致行为问题
+shopping_tip: 准备专用清洁工具
+reassurance: 干净的环境让猫咪更健康
+followup_questions:
+  - 您的清洁计划是怎样的？
+  - 目前执行情况如何？

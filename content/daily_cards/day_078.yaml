@@ -1,0 +1,25 @@
+day_number: 78
+stage_name: 长期优化期
+title: 猫咪独处环境优化日
+focus: 优化猫咪独自在家时的环境
+actions:
+  - text: 规划出门时的猫咪活动空间
+    reason: 确保活动自由
+  - text: 留下足够的玩具和自嗨项目
+    reason: 减少无聊
+  - text: 确保食物和水的充足供应
+    reason: 满足基本需求
+avoids:
+  - text: 不要长时间把猫关在小空间
+    reason: 需要活动空间
+  - text: 不要让猫咪独处时间过长
+    reason: 需要陪伴
+observe:
+  - 独处后猫咪的状态
+  - 是否有破坏行为
+risk_tip: 长期独处可能导致分离焦虑
+shopping_tip: 可准备自动喂食器、监控摄像头
+reassurance: 准备充分的独处环境让您更安心
+followup_questions:
+  - 您平时出门多久？
+  - 猫咪独处时状态如何？

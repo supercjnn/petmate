@@ -1,0 +1,25 @@
+day_number: 42
+stage_name: 稳定护理期
+title: 眼睛检查日
+focus: 学会检查猫咪眼睛的健康状态
+actions:
+  - text: 观察猫咪眼睛是否明亮清澈，有无分泌物
+    reason: 健康的眼睛是整体健康的反映
+  - text: 了解眼屎过多、流泪、红肿可能代表的健康问题
+    reason: 早期发现早期处理
+  - text: 学习正确清理眼分泌物的方法
+    reason: 温柔清洁避免刺激
+avoids:
+  - text: 不要用棉签等尖锐物品接触眼睛
+    reason: 可能造成意外伤害
+  - text: 不要忽视持续的眼睛异常
+    reason: 眼部问题可能涉及其他疾病
+observe:
+  - 眼睛是否清澈明亮
+  - 眼屎的颜色和量
+risk_tip: 若眼睛出现脓性分泌物或浑浊，需尽快就医
+shopping_tip: 备一些宠物专用眼部清洁湿巾，方便日常清理
+reassurance: 你正在学习专业的护理技能，很棒！
+followup_questions:
+  - 猫咪的眼睛看起来怎么样？
+  - 有没有遇到过眼部分泌物增多的情况？

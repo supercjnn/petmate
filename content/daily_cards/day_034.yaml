@@ -1,0 +1,25 @@
+day_number: 34
+stage_name: 稳定护理期
+title: 疫苗接种日准备
+focus: 做好带猫咪去医院的心理和物质准备
+actions:
+  - text: 检查航空箱是否干净、舒适、安全
+    reason: 减少猫咪外出应激
+  - text: 准备一条小毯子或猫咪熟悉的物品放入航空箱
+    reason: 气味熟悉能让猫咪安心
+  - text: 确认医院地址和交通路线
+    reason: 减少路途中的不确定性
+avoids:
+  - text: 不要在猫咪刚吃饱后立即出门
+    reason: 防止晕车呕吐
+  - text: 不要在接种前给猫咪洗澡
+    reason: 洗澡可能造成应激，影响疫苗效果
+observe:
+  - 猫咪今天的精神状态
+  - 航空箱是否合适应对
+risk_tip: 如果是首次使用航空箱，建议先在家让猫咪适应几天
+shopping_tip: 航空箱可选择顶部可打开的款式，方便医生检查时取出猫咪
+reassurance: 提前准备能让接种过程更顺利，你很周到！
+followup_questions:
+  - 猫咪之前坐过航空箱吗？
+  - 去医院选择什么交通工具？

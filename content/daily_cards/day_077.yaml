@@ -1,0 +1,25 @@
+day_number: 77
+stage_name: 长期优化期
+title: 窗户景观优化日
+focus: 让猫咪拥有更好的窗户观景体验
+actions:
+  - text: 检查窗户区域是否安全
+    reason: 防止意外坠落
+  - text: 在窗边设置猫咪休息区
+    reason: 创造观景位置
+  - text: 考虑窗户外是否有吸引物（如鸟、树）
+    reason: 丰富视觉刺激
+avoids:
+  - text: 不要忽视窗户安全
+    reason: 防护网很重要
+  - text: 不要把窗户全部遮挡
+    reason: 猫咪喜欢观察外界
+observe:
+  - 猫咪是否喜欢待在窗边
+  - 观景时的行为表现
+risk_tip: 高层需安装防护网
+shopping_tip: 可放置猫窝或吊床在窗边
+reassurance: 窗户是猫咪的"电视节目"
+followup_questions:
+  - 您家的窗户情况如何？
+  - 有没有安装防护措施？

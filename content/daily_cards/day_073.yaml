@@ -1,0 +1,25 @@
+day_number: 73
+stage_name: 长期优化期
+title: 躲藏空间规划日
+focus: 为猫咪提供安全的躲藏空间
+actions:
+  - text: 观察猫咪喜欢躲藏的地方
+    reason: 了解躲藏偏好
+  - text: 整理现有可用的躲藏空间
+    reason: 利用现有资源
+  - text: 规划增加专门的躲藏空间
+    reason: 满足安全感需求
+avoids:
+  - text: 不要打扰躲藏中的猫咪
+    reason: 躲藏是它的安全需求
+  - text: 不要把躲藏空间封死
+    reason: 保持可进入状态
+observe:
+  - 猫咪在什么情况下会躲起来
+  - 躲藏的频率
+risk_tip: 躲藏空间需保持干净通风
+shopping_tip: 可选择猫窝、猫帐篷或利用纸箱DIY
+reassurance: 躲藏空间让猫咪更有安全感
+followup_questions:
+  - 猫咪平时会躲在哪里？
+  - 您打算怎么提供躲藏空间？

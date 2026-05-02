@@ -1,0 +1,25 @@
+day_number: 45
+stage_name: 稳定护理期
+title: 被毛与皮肤检查
+focus: 学习检查猫咪被毛和皮肤状态
+actions:
+  - text: 抚摸猫咪时留意毛发是否有脱落斑块
+    reason: 局部脱毛可能是皮肤问题
+  - text: 观察皮肤有无红疹、结痂、皮屑过多
+    reason: 皮肤问题需早期发现
+  - text: 了解猫咪正常换毛和异常掉毛的区别
+    reason: 避免过度担忧或忽视问题
+avoids:
+  - text: 不要忽视猫咪频繁抓挠某个部位
+    reason: 可能是局部皮肤问题
+  - text: 不要使用人用皮肤药品
+    reason: 成分可能对猫咪有害
+observe:
+  - 被毛是否顺滑有光泽
+  - 有无秃毛或皮屑过多的区域
+risk_tip: 若发现局部脱毛伴瘙痒，可能是猫藓或过敏，需及时就医
+shopping_tip: 梳子选择密齿梳，有助于发现皮肤问题
+reassurance: 通过触摸检查，你和猫咪也在增进感情！
+followup_questions:
+  - 最近有没有发现猫咪掉毛特别多？
+  - 猫咪有没有经常舔某个部位？

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#FFF8E7"/>
+  <circle cx="256" cy="220" r="120" fill="#FF6B6B"/>
+  <ellipse cx="256" cy="320" rx="80" ry="60" fill="#4ECDC4"/>
+  <circle cx="200" cy="180" r="20" fill="#333"/>
+  <circle cx="312" cy="180" r="20" fill="#333"/>
+  <path d="M220 250 Q256 280 292 250" stroke="#333" stroke-width="8" fill="none"/>
+  <ellipse cx="160" cy="200" rx="30" ry="15" fill="#FFB6B6"/>
+  <ellipse cx="352" cy="200" rx="30" ry="15" fill="#FFB6B6"/>
+  <text x="256" y="420" font-family="Arial" font-size="48" font-weight="bold" text-anchor="middle" fill="#5D4037">PetMate</text>
+</svg>

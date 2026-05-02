@@ -1,0 +1,25 @@
+day_number: 64
+stage_name: 长期优化期
+title: 绝育咨询准备日
+focus: 准备好与兽医沟通的问题清单
+actions:
+  - text: 整理要问兽医的问题清单
+    reason: 充分利用就诊时间
+  - text: 准备猫咪的健康档案
+    reason: 帮助兽医全面评估
+  - text: 了解附近口碑较好的宠物医院
+    reason: 选择靠谱的医疗机构
+avoids:
+  - text: 不要空手去咨询
+    reason: 准备充分才能获得有价值的信息
+  - text: 不要羞于提问
+    reason: 任何疑问都可以问兽医
+observe:
+  - 猫咪最近的健康状况
+  - 疫苗接种是否完整
+risk_tip: 选择正规宠物医院，确保医疗安全
+shopping_tip: 准备一个档案夹收纳猫咪健康记录
+reassurance: 做好准备，咨询会更有收获
+followup_questions:
+  - 您列出了哪些问题？
+  - 心中有意向的医院吗？
