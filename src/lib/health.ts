@@ -1,5 +1,23 @@
 // 健康档案数据模型
 
+export interface WeightRecord {
+  id: string
+  date: string
+  weight: number // kg
+  note?: string
+  createdAt: string
+}
+
+export interface VaccinationRecord {
+  id: string
+  name: string
+  date: string
+  nextDueDate?: string
+  vetName?: string
+  notes?: string
+  createdAt: string
+}
+
 export interface HealthRecord {
   id: string
   date: string

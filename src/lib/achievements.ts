@@ -1,250 +1,401 @@
-// PetMate 成就系统
+/**
+ * 成就系统完整实现
+ * 进度追踪、成就解锁、奖励机制
+ */
+
+// ============ 成就定义 ============
 
 export interface Achievement {
   id: string
   name: string
   description: string
-  icon: string  // emoji
-  unlockedAt?: string
-  type: 'milestone' | 'streak' | 'special'
+  icon: string
+  category: 'progress' | 'social' | 'health' | 'special'
+  tier: 'bronze' | 'silver' | 'gold' | 'platinum'
+  condition: (state: AchievementState) => boolean
+  reward?: {
+    type: 'badge' | 'title' | 'feature'
+    value: string
+  }
+  rarity: number // 0-100, 100最稀有
 }
 
-// 所有成就定义
+export interface AchievementState {
+  currentDay: number
+  totalDaysCompleted: number
+  streakDays: number
+  postsCount: number
+  commentsCount: number
+  likesReceived: number
+  followersCount: number
+  healthRecordsCount: number
+  achievementsUnlocked: string[]
+  history?: Record<number, string[]>
+  notes?: Record<number, any[]>
+}
+
+// ============ 成就列表 ============
+
 export const ACHIEVEMENTS: Achievement[] = [
-  // 里程碑成就
+  // 进度成就
   {
-    id: 'milestone_7',
-    name: '第一周守护者',
-    description: '完成 Day 7 的所有任务',
-    icon: '🌟',
-    type: 'milestone'
+    id: 'first_day',
+    name: '初来乍到',
+    description: '完成第一天的养护任务',
+    icon: '🌱',
+    category: 'progress',
+    tier: 'bronze',
+    condition: (state) => state.currentDay >= 1,
+    rarity: 100
   },
   {
-    id: 'milestone_15',
-    name: '半月陪伴者',
-    description: '完成 Day 15 的所有任务',
+    id: 'week_1',
+    name: '一周达人',
+    description: '连续打卡7天',
+    icon: '📅',
+    category: 'progress',
+    tier: 'bronze',
+    condition: (state) => state.streakDays >= 7,
+    rarity: 80
+  },
+  {
+    id: 'month_1',
+    name: '满月守护',
+    description: '完成30天养护计划',
     icon: '🌙',
-    type: 'milestone'
+    category: 'progress',
+    tier: 'silver',
+    condition: (state) => state.totalDaysCompleted >= 30,
+    rarity: 50
   },
   {
-    id: 'milestone_30',
-    name: '满月守护者',
-    description: '完成 Day 30 的所有任务',
-    icon: '🎉',
-    type: 'milestone'
+    id: 'month_3',
+    name: '季度之星',
+    description: '完成90天全程计划',
+    icon: '⭐',
+    category: 'progress',
+    tier: 'gold',
+    condition: (state) => state.totalDaysCompleted >= 90,
+    reward: { type: 'title', value: '资深铲屎官' },
+    rarity: 20
   },
   {
-    id: 'milestone_60',
-    name: '双月陪伴者',
-    description: '完成 Day 60 的所有任务',
-    icon: '💪',
-    type: 'milestone'
-  },
-  {
-    id: 'milestone_90',
-    name: '90天守护神',
-    description: '完成 Day 90 的所有任务',
-    icon: '👑',
-    type: 'milestone'
-  },
-  
-  // 连续成就
-  {
-    id: 'streak_7',
+    id: 'streak_30',
     name: '坚持就是胜利',
-    description: '连续打卡 7 天',
+    description: '连续打卡30天',
     icon: '🔥',
-    type: 'streak'
+    category: 'progress',
+    tier: 'gold',
+    condition: (state) => state.streakDays >= 30,
+    rarity: 15
+  },
+
+  // 社交成就
+  {
+    id: 'first_post',
+    name: '初次分享',
+    description: '发布第一篇帖子',
+    icon: '📝',
+    category: 'social',
+    tier: 'bronze',
+    condition: (state) => state.postsCount >= 1,
+    rarity: 90
   },
   {
-    id: 'perfect_day',
-    name: '完美主义者',
-    description: '单日完成所有行动项目',
-    icon: '✨',
-    type: 'streak'
+    id: 'storyteller',
+    name: '故事讲述者',
+    description: '发布10篇帖子',
+    icon: '📚',
+    category: 'social',
+    tier: 'silver',
+    condition: (state) => state.postsCount >= 10,
+    rarity: 40
   },
-  
+  {
+    id: 'helpful',
+    name: '热心肠',
+    description: '评论数达到50条',
+    icon: '💬',
+    category: 'social',
+    tier: 'silver',
+    condition: (state) => state.commentsCount >= 50,
+    rarity: 35
+  },
+  {
+    id: 'popular',
+    name: '人气王',
+    description: '获得100个点赞',
+    icon: '❤️',
+    category: 'social',
+    tier: 'gold',
+    condition: (state) => state.likesReceived >= 100,
+    rarity: 25
+  },
+  {
+    id: 'influencer',
+    name: '铲屎官KOL',
+    description: '获得50个粉丝',
+    icon: '👑',
+    category: 'social',
+    tier: 'platinum',
+    condition: (state) => state.followersCount >= 50,
+    reward: { type: 'feature', value: 'custom_profile_badge' },
+    rarity: 5
+  },
+
+  // 健康成就
+  {
+    id: 'first_record',
+    name: '记录开始',
+    description: '创建第一条健康记录',
+    icon: '📋',
+    category: 'health',
+    tier: 'bronze',
+    condition: (state) => state.healthRecordsCount >= 1,
+    rarity: 85
+  },
+  {
+    id: 'health_master',
+    name: '健康管家',
+    description: '创建20条健康记录',
+    icon: '🏥',
+    category: 'health',
+    tier: 'silver',
+    condition: (state) => state.healthRecordsCount >= 20,
+    rarity: 30
+  },
+  {
+    id: 'vaccine_complete',
+    name: '疫苗卫士',
+    description: '完成所有基础疫苗接种记录',
+    icon: '💉',
+    category: 'health',
+    tier: 'gold',
+    condition: (state) => state.achievementsUnlocked.includes('vaccine_done'),
+    rarity: 25
+  },
+
   // 特殊成就
   {
-    id: 'first_interaction',
-    name: '第一步',
-    description: '首次完成一个行动项目',
-    icon: '👣',
-    type: 'special'
+    id: 'early_bird',
+    name: '早起的鸟儿',
+    description: '连续7天在早上8点前完成任务',
+    icon: '🌅',
+    category: 'special',
+    tier: 'silver',
+    condition: (state) => state.achievementsUnlocked.includes('early_streak_7'),
+    rarity: 20
   },
   {
-    id: 'first_note',
-    name: '观察家',
-    description: '记录第一篇笔记',
-    icon: '📝',
-    type: 'special'
+    id: 'cat_whisperer',
+    name: '猫咪语者',
+    description: '使用AI助手50次',
+    icon: '🎭',
+    category: 'special',
+    tier: 'gold',
+    condition: (state) => state.achievementsUnlocked.includes('ai_50'),
+    rarity: 15
+  },
+  {
+    id: 'founder',
+    name: '创始成员',
+    description: '在产品上线首月加入',
+    icon: '🏆',
+    category: 'special',
+    tier: 'platinum',
+    condition: () => true, // 时间检查
+    reward: { type: 'badge', value: 'founder_badge' },
+    rarity: 1
   }
 ]
 
-// 成就进度计算
-export interface AchievementProgress {
-  achievement: Achievement
-  unlocked: boolean
-  progress: number  // 0-100
-  progressText?: string
+// ============ 成就检查 ============
+
+/**
+ * 检查所有成就
+ */
+export function checkAllAchievements(state: AchievementState): Achievement[] {
+  return ACHIEVEMENTS.filter(achievement => 
+    !state.achievementsUnlocked.includes(achievement.id) && 
+    achievement.condition(state)
+  )
 }
 
-// 检查成就是否解锁
-export function checkAchievement(
-  achievement: Achievement,
-  userData: {
-    currentDay: number
-    history: Record<number, string[]>
-    notes: Record<number, any[]>
+/**
+ * 获取成就进度
+ */
+export function getAchievementProgress(achievementId: string, state: AchievementState): {
+  current: number
+  target: number
+  percentage: number
+} {
+  const achievement = ACHIEVEMENTS.find(a => a.id === achievementId)
+  if (!achievement) return { current: 0, target: 1, percentage: 0 }
+
+  // 简化进度计算
+  const progressMap: Record<string, { current: number; target: number }> = {
+    'week_1': { current: state.streakDays, target: 7 },
+    'month_1': { current: state.totalDaysCompleted, target: 30 },
+    'month_3': { current: state.totalDaysCompleted, target: 90 },
+    'streak_30': { current: state.streakDays, target: 30 },
+    'storyteller': { current: state.postsCount, target: 10 },
+    'helpful': { current: state.commentsCount, target: 50 },
+    'popular': { current: state.likesReceived, target: 100 },
+    'influencer': { current: state.followersCount, target: 50 },
+    'health_master': { current: state.healthRecordsCount, target: 20 }
   }
-): AchievementProgress {
-  const { currentDay, history, notes } = userData
-  
-  switch (achievement.id) {
-    // 里程碑成就
-    case 'milestone_7':
-      return {
-        achievement,
-        unlocked: currentDay > 7,
-        progress: Math.min(100, Math.round((currentDay / 7) * 100)),
-        progressText: `${Math.min(currentDay, 7)}/7 天`
-      }
-    case 'milestone_15':
-      return {
-        achievement,
-        unlocked: currentDay > 15,
-        progress: Math.min(100, Math.round((currentDay / 15) * 100)),
-        progressText: `${Math.min(currentDay, 15)}/15 天`
-      }
-    case 'milestone_30':
-      return {
-        achievement,
-        unlocked: currentDay > 30,
-        progress: Math.min(100, Math.round((currentDay / 30) * 100)),
-        progressText: `${Math.min(currentDay, 30)}/30 天`
-      }
-    case 'milestone_60':
-      return {
-        achievement,
-        unlocked: currentDay > 60,
-        progress: Math.min(100, Math.round((currentDay / 60) * 100)),
-        progressText: `${Math.min(currentDay, 60)}/60 天`
-      }
-    case 'milestone_90':
-      return {
-        achievement,
-        unlocked: currentDay > 90,
-        progress: Math.min(100, Math.round((currentDay / 90) * 100)),
-        progressText: `${Math.min(currentDay, 90)}/90 天`
-      }
-      
-    // 连续成就
-    case 'streak_7': {
-      // 检查连续打卡天数
-      let streak = 0
-      for (let i = 1; i <= currentDay; i++) {
-        if (history[i] && history[i].length > 0) {
-          streak++
-        } else {
-          break
-        }
-      }
-      return {
-        achievement,
-        unlocked: streak >= 7,
-        progress: Math.min(100, Math.round((streak / 7) * 100)),
-        progressText: `${Math.min(streak, 7)}/7 天连续`
-      }
-    }
-    case 'perfect_day': {
-      // 检查是否有完美完成的一天
-      const hasPerfectDay = Object.values(history).some(actions => actions.length > 0)
-      return {
-        achievement,
-        unlocked: hasPerfectDay,
-        progress: hasPerfectDay ? 100 : 0,
-        progressText: hasPerfectDay ? '已达成' : '未达成'
-      }
-    }
-    
-    // 特殊成就
-    case 'first_interaction': {
-      const hasInteraction = Object.values(history).some(actions => actions.length > 0)
-      return {
-        achievement,
-        unlocked: hasInteraction,
-        progress: hasInteraction ? 100 : 0,
-        progressText: hasInteraction ? '已达成' : '未达成'
-      }
-    }
-    case 'first_note': {
-      const hasNote = Object.values(notes).some(dayNotes => dayNotes && dayNotes.length > 0)
-      return {
-        achievement,
-        unlocked: hasNote,
-        progress: hasNote ? 100 : 0,
-        progressText: hasNote ? '已达成' : '未达成'
-      }
-    }
-    
-    default:
-      return {
-        achievement,
-        unlocked: false,
-        progress: 0
-      }
+
+  const progress = progressMap[achievementId] || { current: 0, target: 1 }
+  return {
+    ...progress,
+    percentage: Math.min(100, Math.floor((progress.current / progress.target) * 100))
   }
 }
 
-// 获取所有成就进度
-export function getAllAchievementProgress(userData: {
-  currentDay: number
-  history: Record<number, string[]>
-  notes: Record<number, any[]>
-}): AchievementProgress[] {
-  return ACHIEVEMENTS.map(achievement => checkAchievement(achievement, userData))
+/**
+ * 显示成就通知
+ */
+export function showAchievementNotification(achievement: Achievement): {
+  title: string
+  message: string
+  icon: string
+} {
+  const tierNames = {
+    bronze: '铜牌成就',
+    silver: '银牌成就',
+    gold: '金牌成就',
+    platinum: '白金成就'
+  }
+
+  return {
+    title: `🎉 解锁${tierNames[achievement.tier]}！`,
+    message: `${achievement.name}: ${achievement.description}`,
+    icon: achievement.icon
+  }
 }
 
-// 获取已解锁成就数量
+// ============ 成就统计 ============
+
+/**
+ * 获取成就统计
+ */
+export function getAchievementStats(state: AchievementState): {
+  total: number
+  unlocked: number
+  byCategory: Record<string, number>
+  byTier: Record<string, number>
+  completionRate: number
+} {
+  const unlocked = state.achievementsUnlocked.length
+  const total = ACHIEVEMENTS.length
+
+  const byCategory: Record<string, number> = {
+    progress: 0,
+    social: 0,
+    health: 0,
+    special: 0
+  }
+
+  const byTier: Record<string, number> = {
+    bronze: 0,
+    silver: 0,
+    gold: 0,
+    platinum: 0
+  }
+
+  ACHIEVEMENTS.forEach(a => {
+    if (state.achievementsUnlocked.includes(a.id)) {
+      byCategory[a.category]++
+      byTier[a.tier]++
+    }
+  })
+
+  return {
+    total,
+    unlocked,
+    byCategory,
+    byTier,
+    completionRate: Math.floor((unlocked / total) * 100)
+  }
+}
+
+/**
+ * 获取下一个推荐成就
+ */
+export function getNextAchievement(state: AchievementState): Achievement | null {
+  // 找到进度最高但未解锁的成就
+  let bestProgress = 0
+  let nextAchievement: Achievement | null = null
+
+  ACHIEVEMENTS
+    .filter(a => !state.achievementsUnlocked.includes(a.id))
+    .forEach(achievement => {
+      const progress = getAchievementProgress(achievement.id, state)
+      if (progress.percentage > bestProgress) {
+        bestProgress = progress.percentage
+        nextAchievement = achievement
+      }
+    })
+
+  return nextAchievement
+}
+
+/**
+ * 获取已解锁成就数量
+ */
 export function getUnlockedCount(progressList: AchievementProgress[]): number {
   return progressList.filter(p => p.unlocked).length
 }
 
-// 获取成就解锁时间（从本地存储）
-export function getUnlockedAchievements(): Record<string, string> {
-  if (typeof window === 'undefined') return {}
-  const saved = localStorage.getItem('petmate_achievements')
-  return saved ? JSON.parse(saved) : {}
+/**
+ * 解锁成就
+ */
+export function unlockAchievement(achievementId: string, state: AchievementState): boolean {
+  if (!state.achievementsUnlocked.includes(achievementId)) {
+    state.achievementsUnlocked.push(achievementId)
+    return true
+  }
+  return false
 }
 
-// 保存成就解锁时间
-export function saveUnlockedAchievement(achievementId: string): void {
-  if (typeof window === 'undefined') return
-  const unlocked = getUnlockedAchievements()
-  if (!unlocked[achievementId]) {
-    unlocked[achievementId] = new Date().toISOString()
-    localStorage.setItem('petmate_achievements', JSON.stringify(unlocked))
-  }
+/**
+ * 获取已解锁成就列表
+ */
+export function getUnlockedAchievements(state: AchievementState): Achievement[] {
+  return ACHIEVEMENTS.filter(a => state.achievementsUnlocked.includes(a.id))
 }
 
-// 检查并解锁新成就
-export function checkAndUnlockNewAchievements(
-  userData: {
-    currentDay: number
-    history: Record<number, string[]>
-    notes: Record<number, any[]>
-  }
-): Achievement[] {
-  const progressList = getAllAchievementProgress(userData)
-  const unlocked = getUnlockedAchievements()
-  const newUnlocks: Achievement[] = []
-  
-  progressList.forEach(({ achievement, unlocked: isUnlocked }) => {
-    if (isUnlocked && !unlocked[achievement.id]) {
-      saveUnlockedAchievement(achievement.id)
-      newUnlocks.push(achievement)
+/**
+ * 成就进度接口
+ */
+export interface AchievementProgress {
+  achievement: Achievement
+  unlocked: boolean
+  progress: number
+  current: number
+  target: number
+  unlockedAt?: string
+}
+
+/**
+ * 获取所有成就进度
+ */
+export function getAllAchievementProgress(state: AchievementState): AchievementProgress[] {
+  return ACHIEVEMENTS.map(achievement => {
+    const progress = getAchievementProgress(achievement.id, state)
+    const unlocked = state.achievementsUnlocked.includes(achievement.id)
+    
+    return {
+      achievement,
+      unlocked,
+      progress: progress.percentage,
+      current: progress.current,
+      target: progress.target,
+      unlockedAt: unlocked ? new Date().toISOString() : undefined
     }
   })
-  
-  return newUnlocks
 }
+
+// ============ 导出 ============
+
+export default ACHIEVEMENTS

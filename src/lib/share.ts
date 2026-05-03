@@ -1,167 +1,172 @@
-// 分享和导出功能
+/**
+ * 分享功能服务
+ * 生成分享海报、分享链接
+ */
+
+// ============ 分享类型 ============
 
 export interface ShareContent {
-  type: 'daily_card' | 'milestone' | 'achievement' | 'journey'
+  type: 'progress' | 'achievement' | 'post' | 'profile' | 'daily_card' | 'milestone' | 'streak'
   title: string
-  content: string
-  day?: number
-  achievement?: string
+  description: string
+  image?: string
+  data: Record<string, any>
 }
 
-// 生成分享图片的Canvas（简版）
-export function generateShareImage(content: ShareContent): Promise<Blob> {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas')
-    canvas.width = 750
-    canvas.height = 1334
-    const ctx = canvas.getContext('2d')!
-    
-    // 背景渐变
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-    gradient.addColorStop(0, '#FFF8E7')
-    gradient.addColorStop(1, '#FFE4D6')
-    ctx.fillStyle = gradient
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
-    // 标题
-    ctx.fillStyle = '#5D4037'
-    ctx.font = 'bold 48px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText(content.title, canvas.width / 2, 200)
-    
-    // 内容
-    ctx.font = '32px sans-serif'
-    const lines = wrapText(ctx, content.content, 650)
-    let y = 350
-    lines.forEach(line => {
-      ctx.fillText(line, canvas.width / 2, y)
-      y += 60
-    })
-    
-    // Day 标签
-    if (content.day) {
-      ctx.fillStyle = '#FF6B6B'
-      ctx.font = 'bold 36px sans-serif'
-      ctx.fillText(`Day ${content.day}`, canvas.width / 2, canvas.height - 200)
-    }
-    
-    // 品牌
-    ctx.fillStyle = '#999'
-    ctx.font = '28px sans-serif'
-    ctx.fillText('宠伴 PetMate', canvas.width / 2, canvas.height - 100)
-    
-    canvas.toBlob((blob) => {
-      resolve(blob!)
-    }, 'image/png')
-  })
+export interface ShareLink {
+  id: string
+  type: string
+  userId: string
+  content: ShareContent
+  createdAt: string
+  expiresAt?: string
+  viewCount: number
+  likeCount: number
 }
 
-// 文字换行
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const lines: string[] = []
-  const paragraphs = text.split('\n')
+// ============ 内存存储 ============
+
+const shareLinksStore = new Map<string, ShareLink>()
+
+// ============ 分享链接生成 ============
+
+/**
+ * 创建分享链接
+ */
+export function createShareLink(
+  userId: string,
+  content: ShareContent
+): ShareLink {
+  const id = `share_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
   
-  paragraphs.forEach(paragraph => {
-    let line = ''
-    for (const char of paragraph) {
-      const testLine = line + char
-      const metrics = ctx.measureText(testLine)
-      if (metrics.width > maxWidth && line) {
-        lines.push(line)
-        line = char
-      } else {
-        line = testLine
-      }
-    }
-    if (line) lines.push(line)
-  })
-  
-  return lines
-}
-
-// 导出为PDF（简化版，使用浏览器打印）
-export function exportToPDF(title: string, content: string) {
-  const printWindow = window.open('', '_blank')
-  if (!printWindow) return
-  
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>${title}</title>
-      <style>
-        body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          padding: 40px;
-          max-width: 600px;
-          margin: 0 auto;
-          background: #FFF8E7;
-        }
-        h1 {
-          color: #5D4037;
-          border-bottom: 2px solid #FF6B6B;
-          padding-bottom: 10px;
-        }
-        .meta {
-          color: #666;
-          font-size: 14px;
-          margin-bottom: 20px;
-        }
-        .content {
-          line-height: 1.8;
-          color: #333;
-        }
-        .brand {
-          text-align: center;
-          margin-top: 40px;
-          color: #999;
-          font-size: 14px;
-        }
-        @media print {
-          body { background: white; }
-        }
-      </style>
-    </head>
-    <body>
-      <h1>${title}</h1>
-      <div class="meta">宠伴 PetMate · ${new Date().toLocaleDateString('zh-CN')}</div>
-      <div class="content">${content.replace(/\n/g, '<br>')}</div>
-      <div class="brand">宠伴 PetMate - 守护养猫前90天</div>
-    </body>
-    </html>
-  `)
-  printWindow.document.close()
-  printWindow.print()
-}
-
-// 分享到社交平台（使用Web Share API）
-export async function shareToSocial(content: ShareContent): Promise<boolean> {
-  const shareData = {
-    title: content.title,
-    text: content.content,
-    url: window.location.origin
+  const shareLink: ShareLink = {
+    id,
+    type: content.type,
+    userId,
+    content,
+    createdAt: new Date().toISOString(),
+    viewCount: 0,
+    likeCount: 0
   }
   
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData)
-      return true
-    } catch (e) {
-      console.log('分享取消')
-      return false
-    }
+  shareLinksStore.set(id, shareLink)
+  return shareLink
+}
+
+/**
+ * 获取分享链接
+ */
+export function getShareLink(shareId: string): ShareLink | null {
+  const link = shareLinksStore.get(shareId)
+  if (link) {
+    link.viewCount++
   }
-  
-  // 降级：复制到剪贴板
-  try {
-    await navigator.clipboard.writeText(`${content.title}\n\n${content.content}\n\n——来自宠伴 PetMate`)
+  return link || null
+}
+
+/**
+ * 点赞分享
+ */
+export function likeShare(shareId: string): boolean {
+  const link = shareLinksStore.get(shareId)
+  if (link) {
+    link.likeCount++
     return true
-  } catch (e) {
+  }
+  return false
+}
+
+// ============ 分享内容生成 ============
+
+/**
+ * 生成进度分享内容
+ */
+export function generateProgressShare(data: {
+  currentDay: number
+  streakDays: number
+  catName: string
+  achievements: string[]
+}): ShareContent {
+  return {
+    type: 'progress',
+    title: `我和${data.catName}的第${data.currentDay}天`,
+    description: `已连续打卡${data.streakDays}天，解锁${data.achievements.length}个成就！`,
+    data
+  }
+}
+
+/**
+ * 生成成就分享内容
+ */
+export function generateAchievementShare(data: {
+  achievementName: string
+  achievementIcon: string
+  achievementDescription: string
+  catName: string
+}): ShareContent {
+  return {
+    type: 'achievement',
+    title: `解锁成就：${data.achievementName} ${data.achievementIcon}`,
+    description: data.achievementDescription,
+    data
+  }
+}
+
+// ============ 分享海报生成 ============
+
+/**
+ * 生成分享海报（Canvas方案）
+ */
+export async function generateSharePoster(content: ShareContent): Promise<string> {
+  // 简化版：返回占位符
+  // 实际需要Canvas绘制或后端生成
+  
+  const templates: Record<string, string> = {
+    progress: '/assets/share/progress-template.png',
+    achievement: '/assets/share/achievement-template.png',
+    daily_card: '/assets/share/daily-template.png',
+    post: '/assets/share/post-template.png',
+    profile: '/assets/share/profile-template.png'
+  }
+  
+  return templates[content.type] || templates.progress
+}
+
+// ============ 社交平台分享 ============
+
+/**
+ * 分享到微信
+ */
+export function shareToWechat(content: ShareContent): void {
+  // 微信分享需要JS-SDK
+  console.log('分享到微信:', content)
+}
+
+/**
+ * 分享到微博
+ */
+export function shareToWeibo(content: ShareContent): string {
+  const text = encodeURIComponent(`${content.title} - ${content.description}`)
+  const url = encodeURIComponent('https://petmate.app')
+  return `https://service.weibo.com/share/share.php?title=${text}&url=${url}`
+}
+
+/**
+ * 复制分享链接
+ */
+export async function copyShareLink(shareId: string): Promise<boolean> {
+  const link = `https://petmate.app/share/${shareId}`
+  try {
+    await navigator.clipboard.writeText(link)
+    return true
+  } catch {
     return false
   }
 }
 
-// 复制文本
+/**
+ * 复制文本到剪贴板
+ */
 export async function copyToClipboard(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text)
@@ -171,28 +176,20 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-// 生成养猫日记文本
-export function generateJourneyText(
-  day: number,
-  card: any,
-  notes: string[],
-  completedActions: string[]
-): string {
-  const lines = [
-    `【宠伴日记 - Day ${day}】`,
-    '',
-    `📋 今日行动卡：${card.title}`,
-    '',
-    `✅ 已完成：${completedActions.length}项`,
-    ...completedActions.map(a => `  · ${a}`),
-  ]
-  
-  if (notes.length > 0) {
-    lines.push('', '📝 今日观察：')
-    notes.forEach(note => lines.push(`  ${note}`))
+/**
+ * 分享到社交平台（统一接口）
+ */
+export function shareToSocial(platform: string, content: ShareContent): void {
+  switch (platform) {
+    case 'wechat':
+      shareToWechat(content)
+      break
+    case 'weibo':
+      window.open(shareToWeibo(content), '_blank')
+      break
+    default:
+      console.log('分享到:', platform, content)
   }
-  
-  lines.push('', '——来自宠伴 PetMate')
-  
-  return lines.join('\n')
 }
+
+// ============ 导出 ============

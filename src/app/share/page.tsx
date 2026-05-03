@@ -13,42 +13,48 @@ export default function SharePage() {
     switch (type) {
       case 'daily_card':
         content = {
-          type: 'daily_card',
+type: 'daily_card',
           title: '今日行动卡',
-          content: '今天和小猫咪的互动进展...每天都有一张专属行动卡，告诉新手养猫人今天该做什么！',
-          day: 1
+          description: '今天和小猫咪的互动进展...',
+          data: { day: 1 }
         }
         break
       case 'milestone':
         content = {
           type: 'milestone',
           title: '🎉 我完成了7天守护',
-          content: '第一阶段适应期顺利度过！感谢宠伴的每日指导，养猫变得更简单了。',
-          day: 7
+          description: '第一阶段适应期顺利度过！感谢宠伴的每日指导。',
+          data: { day: 7 }
         }
         break
       case 'achievement':
         content = {
           type: 'achievement',
           title: '🏆 获得"第一周守护者"徽章',
-          content: '坚持7天陪伴，解锁了第一个成就徽章！继续加油，90天后我将成为养猫达人！',
-          achievement: '第一周守护者'
+          description: '坚持7天陪伴，解锁了第一个成就徽章！',
+          data: { achievement: '第一周守护者' }
         }
         break
-      case 'journey':
+      case 'streak':
         content = {
-          type: 'journey',
-          title: '我的养猫90天日记',
-          content: '从第一天手忙脚乱到现在和猫咪默契十足，宠伴陪了我90天。\n\nDay 1: 刚接回家，躲在角落不出来\nDay 7: 终于愿意让我摸了\nDay 30: 已经会在我腿上睡觉了\nDay 90: 这是我最好的伙伴'
+          type: 'streak',
+          title: '🔥 连续打卡30天',
+          description: '我的养猫90天日记，宠伴陪我一路成长',
+          data: { days: 30 }
         }
         break
+      default:
+        content = {
+          type: 'progress',
+          title: '养猫进展',
+          description: '今天和小猫咪的互动进展',
+          data: {}
+        }
     }
     
-    const success = await shareToSocial(content)
-    if (success) {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
+    shareToSocial('wechat', content)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -96,7 +102,7 @@ export default function SharePage() {
             </button>
             
             <button
-              onClick={() => handleShare('journey')}
+              onClick={() => handleShare('streak')}
               className="p-4 bg-petmate-bg rounded-lg text-left"
             >
               <div className="text-2xl mb-2">📖</div>

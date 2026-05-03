@@ -31,27 +31,36 @@ export default function AchievementsPage() {
       setUserData(user)
       const progress = getAllAchievementProgress({
         currentDay: user.dayNumber || user.currentDay || 1,
+        totalDaysCompleted: user.totalDaysCompleted || Object.keys(user.history || {}).length,
+        streakDays: user.streakDays || 0,
+        postsCount: user.postsCount || 0,
+        commentsCount: user.commentsCount || 0,
+        likesReceived: user.likesReceived || 0,
+        followersCount: user.followersCount || 0,
+        healthRecordsCount: user.healthRecordsCount || 0,
+        achievementsUnlocked: user.achievements || [],
         history: user.history || {},
         notes: user.notes || {}
       })
       setProgressList(progress)
+      setUnlockedTimes({})
     }
-    setUnlockedTimes(getUnlockedAchievements())
     setLoading(false)
   }, [])
   
   // 按类型分组
-  const milestoneAchievements = progressList.filter(p => p.achievement.type === 'milestone')
-  const streakAchievements = progressList.filter(p => p.achievement.type === 'streak')
-  const specialAchievements = progressList.filter(p => p.achievement.type === 'special')
+  const milestoneAchievements = progressList.filter(p => p.achievement.category === 'progress')
+  const streakAchievements = progressList.filter(p => p.achievement.category === 'social')
+  const specialAchievements = progressList.filter(p => p.achievement.category === 'special')
   
   const unlockedCount = getUnlockedCount(progressList)
   const totalCount = ACHIEVEMENTS.length
   
   // 渲染成就卡片
   const renderAchievementCard = (progress: AchievementProgress) => {
-    const { achievement, unlocked, progress: percent, progressText } = progress
+    const { achievement, unlocked, progress: percent } = progress
     const unlockedAt = unlockedTimes[achievement.id]
+    const progressText = `${progress.current}/${progress.target}`
     
     return (
       <div
@@ -239,7 +248,7 @@ export default function AchievementsPage() {
                     />
                   </div>
                   <p className="text-gray-600 text-sm">
-                    进度：{selectedAchievement.progressText || `${selectedAchievement.progress}%`}
+                    进度：{`${selectedAchievement.current}/${selectedAchievement.target}`}
                   </p>
                 </div>
               )}
@@ -345,10 +354,10 @@ export default function AchievementsPage() {
                 setGenerating(true)
                 try {
                   const blob = await generateAchievementCard({
-                    name: selectedAchievement.achievement.name,
+                    title: selectedAchievement.achievement.name,
                     icon: selectedAchievement.achievement.icon,
                     description: selectedAchievement.achievement.description,
-                    unlockedAt: unlockedTimes[selectedAchievement.achievement.id] || new Date().toISOString()
+                    brand: '宠伴 PetMate'
                   })
                   downloadPoster(blob, `achievement-${selectedAchievement.achievement.id}.png`)
                 } catch (e) {
