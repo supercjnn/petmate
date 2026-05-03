@@ -159,7 +159,7 @@ export default function LandingPage() {
             <Card className="border-2 border-primary-100">
               {/* 卡片头部 */}
               <div className="flex items-center justify-between mb-4">
-                <Badge variant="primary">适应期</Badge>
+                <Badge variant="default">适应期</Badge>
                 <span className="text-sm text-gray-500">Day 1</span>
               </div>
 
