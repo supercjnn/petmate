@@ -138,7 +138,7 @@ export async function generateSharePoster(content: ShareContent): Promise<string
   
   ctx.font = '32px sans-serif'
   ctx.fillStyle = '#374151'
-  ctx.fillText(content.description, template.width / 2, 300)
+  ctx.fillText(content.message, template.width / 2, 300)
   
   return canvas.toDataURL('image/png')
 }

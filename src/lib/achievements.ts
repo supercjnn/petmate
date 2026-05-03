@@ -1,401 +1,348 @@
 /**
- * 成就系统完整实现
- * 进度追踪、成就解锁、奖励机制
+ * 成就系统核心逻辑
+ * 定义成就、解锁条件、通知、分享卡片
  */
 
-// ============ 成就定义 ============
-
-export interface Achievement {
+export interface AchievementDefinition {
   id: string
-  name: string
+  title: string
   description: string
   icon: string
-  category: 'progress' | 'social' | 'health' | 'special'
-  tier: 'bronze' | 'silver' | 'gold' | 'platinum'
-  condition: (state: AchievementState) => boolean
-  reward?: {
-    type: 'badge' | 'title' | 'feature'
-    value: string
+  category: 'progress' | 'social' | 'knowledge' | 'special'
+  condition: {
+    type: 'days' | 'actions' | 'notes' | 'ai_calls' | 'shares' | 'streak' | 'hidden'
+    threshold: number
   }
-  rarity: number // 0-100, 100最稀有
+  reward?: {
+    points?: number
+    badge?: string
+    unlockContent?: string
+  }
+  rarity: 'common' | 'rare' | 'epic' | 'legendary'
+  hidden?: boolean
 }
 
-export interface AchievementState {
-  currentDay: number
-  totalDaysCompleted: number
-  streakDays: number
-  postsCount: number
-  commentsCount: number
-  likesReceived: number
-  followersCount: number
-  healthRecordsCount: number
-  achievementsUnlocked: string[]
-  history?: Record<number, string[]>
-  notes?: Record<number, any[]>
-}
-
-// ============ 成就列表 ============
-
-export const ACHIEVEMENTS: Achievement[] = [
-  // 进度成就
+export const ACHIEVEMENTS: AchievementDefinition[] = [
+  // ===== 进度类 =====
   {
     id: 'first_day',
-    name: '初来乍到',
-    description: '完成第一天的养护任务',
-    icon: '🌱',
+    title: '初来乍到',
+    description: '完成第一天的行动卡',
+    icon: '🌟',
     category: 'progress',
-    tier: 'bronze',
-    condition: (state) => state.currentDay >= 1,
-    rarity: 100
+    condition: { type: 'days', threshold: 1 },
+    rarity: 'common'
   },
   {
-    id: 'week_1',
-    name: '一周达人',
-    description: '连续打卡7天',
+    id: 'week_one',
+    title: '一周坚持',
+    description: '连续完成7天行动卡',
     icon: '📅',
     category: 'progress',
-    tier: 'bronze',
-    condition: (state) => state.streakDays >= 7,
-    rarity: 80
+    condition: { type: 'days', threshold: 7 },
+    reward: { points: 50 },
+    rarity: 'common'
   },
   {
-    id: 'month_1',
-    name: '满月守护',
-    description: '完成30天养护计划',
-    icon: '🌙',
+    id: 'month_one',
+    title: '月度达人',
+    description: '完成30天行动卡',
+    icon: '🏆',
     category: 'progress',
-    tier: 'silver',
-    condition: (state) => state.totalDaysCompleted >= 30,
-    rarity: 50
+    condition: { type: 'days', threshold: 30 },
+    reward: { points: 100, badge: '月度达人' },
+    rarity: 'rare'
   },
   {
-    id: 'month_3',
-    name: '季度之星',
-    description: '完成90天全程计划',
-    icon: '⭐',
+    id: 'two_months',
+    title: '两个月坚持',
+    description: '完成60天行动卡',
+    icon: '🎖️',
     category: 'progress',
-    tier: 'gold',
-    condition: (state) => state.totalDaysCompleted >= 90,
-    reward: { type: 'title', value: '资深铲屎官' },
-    rarity: 20
+    condition: { type: 'days', threshold: 60 },
+    reward: { points: 200 },
+    rarity: 'rare'
+  },
+  {
+    id: 'full_journey',
+    title: '90天达人',
+    description: '完成全部90天计划',
+    icon: '👑',
+    category: 'progress',
+    condition: { type: 'days', threshold: 90 },
+    reward: { points: 500, badge: '90天达人', unlockContent: '高级护理指南' },
+    rarity: 'legendary'
+  },
+  {
+    id: 'streak_7',
+    title: '连续打卡',
+    description: '连续7天每天完成所有行动',
+    icon: '🔥',
+    category: 'progress',
+    condition: { type: 'streak', threshold: 7 },
+    reward: { points: 30 },
+    rarity: 'common'
   },
   {
     id: 'streak_30',
-    name: '坚持就是胜利',
-    description: '连续打卡30天',
-    icon: '🔥',
+    title: '坚持之星',
+    description: '连续30天每天完成所有行动',
+    icon: '💫',
     category: 'progress',
-    tier: 'gold',
-    condition: (state) => state.streakDays >= 30,
-    rarity: 15
+    condition: { type: 'streak', threshold: 30 },
+    reward: { points: 150, badge: '坚持之星' },
+    rarity: 'epic'
   },
 
-  // 社交成就
+  // ===== 社交类 =====
   {
-    id: 'first_post',
-    name: '初次分享',
-    description: '发布第一篇帖子',
+    id: 'first_share',
+    title: '分享达人',
+    description: '首次分享养猫经验',
+    icon: '🔗',
+    category: 'social',
+    condition: { type: 'shares', threshold: 1 },
+    rarity: 'common'
+  },
+  {
+    id: 'share_master',
+    title: '传播大使',
+    description: '分享10次养猫经验',
+    icon: '📢',
+    category: 'social',
+    condition: { type: 'shares', threshold: 10 },
+    reward: { points: 100 },
+    rarity: 'rare'
+  },
+  {
+    id: 'inviter',
+    title: '邀请达人',
+    description: '成功邀请3位朋友加入',
+    icon: '👥',
+    category: 'social',
+    condition: { type: 'shares', threshold: 3 }, // 用invites替代
+    reward: { points: 200, badge: '邀请达人' },
+    rarity: 'epic'
+  },
+
+  // ===== 知识类 =====
+  {
+    id: 'first_note',
+    title: '观察家',
+    description: '记录第一篇养猫笔记',
     icon: '📝',
-    category: 'social',
-    tier: 'bronze',
-    condition: (state) => state.postsCount >= 1,
-    rarity: 90
+    category: 'knowledge',
+    condition: { type: 'notes', threshold: 1 },
+    rarity: 'common'
   },
   {
-    id: 'storyteller',
-    name: '故事讲述者',
-    description: '发布10篇帖子',
-    icon: '📚',
-    category: 'social',
-    tier: 'silver',
-    condition: (state) => state.postsCount >= 10,
-    rarity: 40
-  },
-  {
-    id: 'helpful',
-    name: '热心肠',
-    description: '评论数达到50条',
-    icon: '💬',
-    category: 'social',
-    tier: 'silver',
-    condition: (state) => state.commentsCount >= 50,
-    rarity: 35
-  },
-  {
-    id: 'popular',
-    name: '人气王',
-    description: '获得100个点赞',
-    icon: '❤️',
-    category: 'social',
-    tier: 'gold',
-    condition: (state) => state.likesReceived >= 100,
-    rarity: 25
-  },
-  {
-    id: 'influencer',
-    name: '铲屎官KOL',
-    description: '获得50个粉丝',
-    icon: '👑',
-    category: 'social',
-    tier: 'platinum',
-    condition: (state) => state.followersCount >= 50,
-    reward: { type: 'feature', value: 'custom_profile_badge' },
-    rarity: 5
-  },
-
-  // 健康成就
-  {
-    id: 'first_record',
-    name: '记录开始',
-    description: '创建第一条健康记录',
-    icon: '📋',
-    category: 'health',
-    tier: 'bronze',
-    condition: (state) => state.healthRecordsCount >= 1,
-    rarity: 85
-  },
-  {
-    id: 'health_master',
-    name: '健康管家',
-    description: '创建20条健康记录',
-    icon: '🏥',
-    category: 'health',
-    tier: 'silver',
-    condition: (state) => state.healthRecordsCount >= 20,
-    rarity: 30
-  },
-  {
-    id: 'vaccine_complete',
-    name: '疫苗卫士',
-    description: '完成所有基础疫苗接种记录',
-    icon: '💉',
-    category: 'health',
-    tier: 'gold',
-    condition: (state) => state.achievementsUnlocked.includes('vaccine_done'),
-    rarity: 25
-  },
-
-  // 特殊成就
-  {
-    id: 'early_bird',
-    name: '早起的鸟儿',
-    description: '连续7天在早上8点前完成任务',
-    icon: '🌅',
-    category: 'special',
-    tier: 'silver',
-    condition: (state) => state.achievementsUnlocked.includes('early_streak_7'),
-    rarity: 20
+    id: 'note_keeper',
+    title: '笔记达人',
+    description: '记录10篇养猫笔记',
+    icon: '📒',
+    category: 'knowledge',
+    condition: { type: 'notes', threshold: 10 },
+    reward: { points: 50 },
+    rarity: 'common'
   },
   {
     id: 'cat_whisperer',
-    name: '猫咪语者',
-    description: '使用AI助手50次',
-    icon: '🎭',
-    category: 'special',
-    tier: 'gold',
-    condition: (state) => state.achievementsUnlocked.includes('ai_50'),
-    rarity: 15
+    title: '猫咪语者',
+    description: '记录50次猫咪行为观察',
+    icon: '🐱',
+    category: 'knowledge',
+    condition: { type: 'notes', threshold: 50 },
+    reward: { points: 200, badge: '猫咪语者' },
+    rarity: 'epic'
   },
   {
-    id: 'founder',
-    name: '创始成员',
-    description: '在产品上线首月加入',
-    icon: '🏆',
+    id: 'ai_asker',
+    title: '好学好问',
+    description: '使用AI问答10次',
+    icon: '🤖',
+    category: 'knowledge',
+    condition: { type: 'ai_calls', threshold: 10 },
+    reward: { points: 30 },
+    rarity: 'common'
+  },
+  {
+    id: 'ai_master',
+    title: 'AI达人',
+    description: '使用AI问答50次',
+    icon: '🧠',
+    category: 'knowledge',
+    condition: { type: 'ai_calls', threshold: 50 },
+    reward: { points: 100 },
+    rarity: 'rare'
+  },
+
+  // ===== 特殊/隐藏类 =====
+  {
+    id: 'night_owl',
+    title: '夜猫子',
+    description: '在凌晨0-4点完成行动卡',
+    icon: '🌙',
     category: 'special',
-    tier: 'platinum',
-    condition: () => true, // 时间检查
-    reward: { type: 'badge', value: 'founder_badge' },
-    rarity: 1
+    condition: { type: 'hidden', threshold: 1 },
+    hidden: true,
+    rarity: 'rare'
+  },
+  {
+    id: 'early_bird',
+    title: '早起鸟',
+    description: '在早上5-7点完成行动卡',
+    icon: '🌅',
+    category: 'special',
+    condition: { type: 'hidden', threshold: 1 },
+    hidden: true,
+    rarity: 'rare'
+  },
+  {
+    id: 'lucky_day',
+    title: '幸运日',
+    description: '在猫咪生日或纪念日完成行动',
+    icon: '🍀',
+    category: 'special',
+    condition: { type: 'hidden', threshold: 1 },
+    hidden: true,
+    rarity: 'epic'
+  },
+  {
+    id: 'perfectionist',
+    title: '完美主义者',
+    description: '连续5天100%完成所有行动',
+    icon: '💎',
+    category: 'special',
+    condition: { type: 'streak', threshold: 5 }, // 特殊streak条件
+    rarity: 'legendary'
   }
 ]
 
-// ============ 成就检查 ============
-
-/**
- * 检查所有成就
- */
-export function checkAllAchievements(state: AchievementState): Achievement[] {
-  return ACHIEVEMENTS.filter(achievement => 
-    !state.achievementsUnlocked.includes(achievement.id) && 
-    achievement.condition(state)
-  )
+// 检查成就解锁
+export interface UserStats {
+  daysCompleted: number
+  actionsCompleted: number
+  notesCount: number
+  aiCallsCount: number
+  sharesCount: number
+  streakDays: number
+  unlockedAchievements: string[]
 }
 
-/**
- * 获取成就进度
- */
-export function getAchievementProgress(achievementId: string, state: AchievementState): {
-  current: number
-  target: number
-  percentage: number
-} {
-  const achievement = ACHIEVEMENTS.find(a => a.id === achievementId)
-  if (!achievement) return { current: 0, target: 1, percentage: 0 }
+export function checkAchievementUnlock(
+  achievement: AchievementDefinition,
+  stats: UserStats
+): boolean {
+  if (stats.unlockedAchievements.includes(achievement.id)) return false
 
-  // 简化进度计算
-  const progressMap: Record<string, { current: number; target: number }> = {
-    'week_1': { current: state.streakDays, target: 7 },
-    'month_1': { current: state.totalDaysCompleted, target: 30 },
-    'month_3': { current: state.totalDaysCompleted, target: 90 },
-    'streak_30': { current: state.streakDays, target: 30 },
-    'storyteller': { current: state.postsCount, target: 10 },
-    'helpful': { current: state.commentsCount, target: 50 },
-    'popular': { current: state.likesReceived, target: 100 },
-    'influencer': { current: state.followersCount, target: 50 },
-    'health_master': { current: state.healthRecordsCount, target: 20 }
+  const { type, threshold } = achievement.condition
+
+  switch (type) {
+    case 'days':
+      return stats.daysCompleted >= threshold
+    case 'actions':
+      return stats.actionsCompleted >= threshold
+    case 'notes':
+      return stats.notesCount >= threshold
+    case 'ai_calls':
+      return stats.aiCallsCount >= threshold
+    case 'shares':
+      return stats.sharesCount >= threshold
+    case 'streak':
+      return stats.streakDays >= threshold
+    case 'hidden':
+      // 需要特殊触发，这里返回false
+      return false
+    default:
+      return false
+  }
+}
+
+// 批量检查解锁
+export function checkAllAchievements(stats: UserStats): AchievementDefinition[] {
+  return ACHIEVEMENTS.filter(a => checkAchievementUnlock(a, stats))
+}
+
+// 获取成就进度
+export function getAchievementProgress(
+  achievement: AchievementDefinition,
+  stats: UserStats
+): { current: number; target: number; percentage: number } {
+  const { type, threshold } = achievement.condition
+
+  let current = 0
+  switch (type) {
+    case 'days':
+      current = stats.daysCompleted
+      break
+    case 'notes':
+      current = stats.notesCount
+      break
+    case 'ai_calls':
+      current = stats.aiCallsCount
+      break
+    case 'shares':
+      current = stats.sharesCount
+      break
+    case 'streak':
+      current = stats.streakDays
+      break
   }
 
-  const progress = progressMap[achievementId] || { current: 0, target: 1 }
   return {
-    ...progress,
-    percentage: Math.min(100, Math.floor((progress.current / progress.target) * 100))
+    current,
+    target: threshold,
+    percentage: Math.min(100, Math.round((current / threshold) * 100))
   }
 }
 
-/**
- * 显示成就通知
- */
-export function showAchievementNotification(achievement: Achievement): {
+// 计算总积分
+export function calculateTotalPoints(unlockedIds: string[]): number {
+  return unlockedIds.reduce((total, id) => {
+    const achievement = ACHIEVEMENTS.find(a => a.id === id)
+    return total + (achievement?.reward?.points || 0)
+  }, 0)
+}
+
+// 计算用户等级
+export function calculateUserLevel(points: number): { level: number; title: string; nextLevel: number } {
+  const levels = [
+    { level: 1, title: '新手铲屎官', minPoints: 0 },
+    { level: 2, title: '初级铲屎官', minPoints: 50 },
+    { level: 3, title: '中级铲屎官', minPoints: 150 },
+    { level: 4, title: '高级铲屎官', minPoints: 300 },
+    { level: 5, title: '资深铲屎官', minPoints: 500 },
+    { level: 6, title: '猫咪大师', minPoints: 800 },
+    { level: 7, title: '猫咪专家', minPoints: 1200 },
+    { level: 8, title: '猫咪传奇', minPoints: 2000 }
+  ]
+
+  for (let i = levels.length - 1; i >= 0; i--) {
+    if (points >= levels[i].minPoints) {
+      const nextLevel = i < levels.length - 1 ? levels[i + 1].minPoints : levels[i].minPoints
+      return { level: levels[i].level, title: levels[i].title, nextLevel }
+    }
+  }
+
+  return { level: 1, title: '新手铲屎官', nextLevel: 50 }
+}
+
+// 成就分享卡片数据
+export function generateShareCard(achievement: AchievementDefinition, stats: UserStats): {
   title: string
   message: string
-  icon: string
+  gradient: string
 } {
-  const tierNames = {
-    bronze: '铜牌成就',
-    silver: '银牌成就',
-    gold: '金牌成就',
-    platinum: '白金成就'
+  const rarityColors = {
+    common: 'from-gray-400 to-gray-600',
+    rare: 'from-blue-400 to-blue-600',
+    epic: 'from-purple-400 to-purple-600',
+    legendary: 'from-yellow-400 to-orange-500'
   }
 
   return {
-    title: `🎉 解锁${tierNames[achievement.tier]}！`,
-    message: `${achievement.name}: ${achievement.description}`,
-    icon: achievement.icon
+    title: `🎉 解锁成就：${achievement.title}`,
+    message: `${achievement.description}\n已坚持${stats.daysCompleted}天，获得${calculateTotalPoints(stats.unlockedAchievements)}积分`,
+    gradient: rarityColors[achievement.rarity]
   }
 }
-
-// ============ 成就统计 ============
-
-/**
- * 获取成就统计
- */
-export function getAchievementStats(state: AchievementState): {
-  total: number
-  unlocked: number
-  byCategory: Record<string, number>
-  byTier: Record<string, number>
-  completionRate: number
-} {
-  const unlocked = state.achievementsUnlocked.length
-  const total = ACHIEVEMENTS.length
-
-  const byCategory: Record<string, number> = {
-    progress: 0,
-    social: 0,
-    health: 0,
-    special: 0
-  }
-
-  const byTier: Record<string, number> = {
-    bronze: 0,
-    silver: 0,
-    gold: 0,
-    platinum: 0
-  }
-
-  ACHIEVEMENTS.forEach(a => {
-    if (state.achievementsUnlocked.includes(a.id)) {
-      byCategory[a.category]++
-      byTier[a.tier]++
-    }
-  })
-
-  return {
-    total,
-    unlocked,
-    byCategory,
-    byTier,
-    completionRate: Math.floor((unlocked / total) * 100)
-  }
-}
-
-/**
- * 获取下一个推荐成就
- */
-export function getNextAchievement(state: AchievementState): Achievement | null {
-  // 找到进度最高但未解锁的成就
-  let bestProgress = 0
-  let nextAchievement: Achievement | null = null
-
-  ACHIEVEMENTS
-    .filter(a => !state.achievementsUnlocked.includes(a.id))
-    .forEach(achievement => {
-      const progress = getAchievementProgress(achievement.id, state)
-      if (progress.percentage > bestProgress) {
-        bestProgress = progress.percentage
-        nextAchievement = achievement
-      }
-    })
-
-  return nextAchievement
-}
-
-/**
- * 获取已解锁成就数量
- */
-export function getUnlockedCount(progressList: AchievementProgress[]): number {
-  return progressList.filter(p => p.unlocked).length
-}
-
-/**
- * 解锁成就
- */
-export function unlockAchievement(achievementId: string, state: AchievementState): boolean {
-  if (!state.achievementsUnlocked.includes(achievementId)) {
-    state.achievementsUnlocked.push(achievementId)
-    return true
-  }
-  return false
-}
-
-/**
- * 获取已解锁成就列表
- */
-export function getUnlockedAchievements(state: AchievementState): Achievement[] {
-  return ACHIEVEMENTS.filter(a => state.achievementsUnlocked.includes(a.id))
-}
-
-/**
- * 成就进度接口
- */
-export interface AchievementProgress {
-  achievement: Achievement
-  unlocked: boolean
-  progress: number
-  current: number
-  target: number
-  unlockedAt?: string
-}
-
-/**
- * 获取所有成就进度
- */
-export function getAllAchievementProgress(state: AchievementState): AchievementProgress[] {
-  return ACHIEVEMENTS.map(achievement => {
-    const progress = getAchievementProgress(achievement.id, state)
-    const unlocked = state.achievementsUnlocked.includes(achievement.id)
-    
-    return {
-      achievement,
-      unlocked,
-      progress: progress.percentage,
-      current: progress.current,
-      target: progress.target,
-      unlockedAt: unlocked ? new Date().toISOString() : undefined
-    }
-  })
-}
-
-// ============ 导出 ============
-
-export default ACHIEVEMENTS
