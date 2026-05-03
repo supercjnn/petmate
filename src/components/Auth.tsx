@@ -34,7 +34,7 @@ export function LoginForm() {
         if (result.error) {
           setError(result.error.userMessage)
         } else if (result.user) {
-          login(result.user, result.session?.access_token || '')
+          login(result.user)
           router.push('/dashboard')
         }
       } else {
@@ -42,7 +42,7 @@ export function LoginForm() {
         if (result.error) {
           setError(result.error.userMessage)
         } else if (result.user) {
-          login(result.user, result.session?.access_token || '')
+          login(result.user)
           router.push('/dashboard')
         }
       }
@@ -58,7 +58,7 @@ export function LoginForm() {
     try {
       const result = await signInAsGuest()
       if (result.user) {
-        login(result.user, '')
+        login(result.user)
         router.push('/dashboard')
       }
     } catch (err) {
