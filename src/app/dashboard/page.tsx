@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppLayout } from '@/components/layout'
 import { Button, Card, Badge, Progress, Spinner, EmptyState } from '@/components/ui'
-import { IconChevronDown, IconChevronUp, IconCheck, IconAI, IconCalendar, IconClock, IconTrophy, IconEdit, IconHeart } from '@/components/icons'
+import { IconChevronDown, IconChevronUp, IconCheck, IconAI, IconCalendar, IconClock, IconTrophy, IconEdit, IconHeart, IconCat, IconBell, IconDownload, IconSettings, IconUser } from '@/components/icons'
 import { FadeIn, SlideIn, CountUp, AnimatedProgress } from '@/components/animations'
+import { getAllCats } from '@/lib/health-records'
+import { getUnreadNotifications } from '@/lib/notifications'
 
 export default function DashboardPage() {
   const [dayNumber, setDayNumber] = useState(1)
@@ -16,11 +18,17 @@ export default function DashboardPage() {
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiAnswer, setAiAnswer] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
+  const [catsCount, setCatsCount] = useState(0)
+  const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     const userData = localStorage.getItem('petmate_user')
     const saved = userData ? JSON.parse(userData) : {}
     setDayNumber(saved.dayNumber || 1)
+
+    // 加载数据
+    setCatsCount(getAllCats().length)
+    setUnreadCount(getUnreadNotifications().length)
 
     fetch(`/api/card?day=${saved.dayNumber || 1}`)
       .then(res => res.json())
@@ -268,20 +276,108 @@ export default function DashboardPage() {
           </SlideIn>
         )}
 
-        {/* 快捷入口 */}
-        <div className="grid grid-cols-2 gap-4 mt-6">
-          <Link href="/notes">
-            <Card hover className="text-center">
-              <IconEdit className="w-6 h-6 mx-auto mb-2 text-purple-500" />
-              <p className="font-medium">养猫笔记</p>
-            </Card>
-          </Link>
-          <Link href="/achievements">
-            <Card hover className="text-center">
-              <IconTrophy className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
-              <p className="font-medium">成就系统</p>
-            </Card>
-          </Link>
+        {/* 功能入口网格 */}
+        <div className="mt-6">
+          <h3 className="font-bold mb-3 text-gray-700">功能中心</h3>
+          <div className="grid grid-cols-3 gap-3">
+            {/* 健康档案 */}
+            <Link href="/health">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center">
+                  <IconCat className="w-5 h-5 text-red-500" />
+                </div>
+                <p className="text-sm font-medium">健康档案</p>
+                {catsCount > 0 && (
+                  <Badge size="sm" variant="success" className="mt-1">{catsCount}只</Badge>
+                )}
+              </Card>
+            </Link>
+
+            {/* AI问答 */}
+            <Link href="/ai-chat">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center">
+                  <IconAI className="w-5 h-5 text-orange-500" />
+                </div>
+                <p className="text-sm font-medium">AI问答</p>
+              </Card>
+            </Link>
+
+            {/* 通知中心 */}
+            <Link href="/notifications">
+              <Card hover className="text-center py-4 relative">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+                  <IconBell className="w-5 h-5 text-blue-500" />
+                </div>
+                <p className="text-sm font-medium">通知</p>
+                {unreadCount > 0 && (
+                  <span className="absolute top-2 right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </Card>
+            </Link>
+
+            {/* 笔记 */}
+            <Link href="/notes">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-purple-100 to-violet-100 flex items-center justify-center">
+                  <IconEdit className="w-5 h-5 text-purple-500" />
+                </div>
+                <p className="text-sm font-medium">笔记</p>
+              </Card>
+            </Link>
+
+            {/* 成就 */}
+            <Link href="/achievements">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-yellow-100 to-amber-100 flex items-center justify-center">
+                  <IconTrophy className="w-5 h-5 text-yellow-500" />
+                </div>
+                <p className="text-sm font-medium">成就</p>
+              </Card>
+            </Link>
+
+            {/* 数据管理 */}
+            <Link href="/data">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
+                  <IconDownload className="w-5 h-5 text-green-500" />
+                </div>
+                <p className="text-sm font-medium">数据</p>
+              </Card>
+            </Link>
+
+            {/* 知识库 */}
+            <Link href="/knowledge">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center">
+                  <IconHeart className="w-5 h-5 text-indigo-500" />
+                </div>
+                <p className="text-sm font-medium">知识库</p>
+              </Card>
+            </Link>
+
+            {/* 品种百科 */}
+            <Link href="/breed-encyclopedia">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
+                  <IconCat className="w-5 h-5 text-teal-500" />
+                </div>
+                <p className="text-sm font-medium">品种百科</p>
+              </Card>
+            </Link>
+
+            {/* 设置 */}
+            <Link href="/settings">
+              <Card hover className="text-center py-4">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br from-gray-100 to-slate-100 flex items-center justify-center">
+                  <IconSettings className="w-5 h-5 text-gray-500" />
+                </div>
+                <p className="text-sm font-medium">设置</p>
+              </Card>
+            </Link>
+          </div>
         </div>
       </FadeIn>
     </AppLayout>
