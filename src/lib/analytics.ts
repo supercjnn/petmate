@@ -180,14 +180,19 @@ export function calculateFunnel(
     filteredEvents = filteredEvents.filter(e => e.userId === options.userId)
   }
   
-  const stepsData: Array<{ step: FunnelStep; count: number; percentage: number; dropoff: number }> = funnel.steps.map((step, index) => {
-    const count = filteredEvents.filter(e => 
+  // 先计算所有步骤的计数
+  const counts = funnel.steps.map((step) => {
+    return filteredEvents.filter(e => 
       e.eventType === step.event &&
       (!step.properties || Object.entries(step.properties).every(([k, v]) => e.properties[k] === v))
     ).length
-    
-    const prevCount = index === 0 ? count : stepsData[index - 1].count
-    const percentage = index === 0 ? 100 : Math.round((count / prevCount) * 100)
+  })
+  
+  // 再构建步骤数据
+  const stepsData: Array<{ step: FunnelStep; count: number; percentage: number; dropoff: number }> = funnel.steps.map((step, index) => {
+    const count = counts[index]
+    const prevCount = index === 0 ? count : counts[index - 1]
+    const percentage = index === 0 ? 100 : (prevCount > 0 ? Math.round((count / prevCount) * 100) : 0)
     const dropoff = index === 0 ? 0 : prevCount - count
     
     return { step, count, percentage, dropoff }

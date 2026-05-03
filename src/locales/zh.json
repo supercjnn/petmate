@@ -1,0 +1,171 @@
+{
+  "common": {
+    "appName": "PetMate",
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "cancel": "取消",
+    "confirm": "确认",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "search": "搜索",
+    "noData": "暂无数据"
+  },
+  "nav": {
+    "home": "首页",
+    "dashboard": "决策系统",
+    "ai": "AI助手",
+    "profile": "我的",
+    "settings": "设置",
+    "about": "关于我们"
+  },
+  "home": {
+    "hero": {
+      "title": "新手养猫90天决策系统",
+      "subtitle": "科学的养育指南，让新手铲屎官轻松上路",
+      "cta": "立即开始"
+    },
+    "features": {
+      "title": "为什么选择 PetMate",
+      "daily": {
+        "title": "每日决策卡",
+        "desc": "一天一个关键决策，90天养成科学养猫习惯"
+      },
+      "ai": {
+        "title": "AI 猫咪顾问",
+        "desc": "24小时在线，随时解答你的养猫疑问"
+      },
+      "progress": {
+        "title": "成长追踪",
+        "desc": "记录你和猫咪的每一步成长"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "决策系统",
+    "day": "第 {{day}} 天",
+    "progress": "完成进度",
+    "todayCard": "今日决策卡",
+    "completedActions": "已完成 {{count}} 个行动",
+    "noActions": "今日暂无待办事项"
+  },
+  "card": {
+    "title": "决策卡片",
+    "complete": "完成此行动",
+    "skip": "跳过",
+    "important": "重要提醒",
+    "tips": "小贴士",
+    "resources": "相关资源"
+  },
+  "ai": {
+    "title": "AI 猫咪顾问",
+    "placeholder": "输入你的问题...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "suggestions": {
+      "title": "热门问题",
+      "feeding": "猫咪一天喂几次？",
+      "water": "猫咪不爱喝水怎么办？",
+      "sleep": "猫咪睡觉时间正常吗？",
+      "play": "如何陪猫咪玩耍？"
+    }
+  },
+  "profile": {
+    "title": "个人中心",
+    "myCat": "我的猫咪",
+    "achievements": "成就",
+    "history": "历史记录",
+    "settings": "设置"
+  },
+  "cat": {
+    "name": "名字",
+    "breed": "品种",
+    "age": "年龄",
+    "birthday": "生日",
+    "weight": "体重",
+    "gender": {
+      "label": "性别",
+      "male": "公猫",
+      "female": "母猫",
+      "unknown": "未知"
+    },
+    "sterilized": {
+      "label": "绝育状态",
+      "yes": "已绝育",
+      "no": "未绝育"
+    }
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "欢迎来到 PetMate",
+      "subtitle": "让我们开始你的养猫之旅"
+    },
+    "catInfo": {
+      "title": "告诉我你的猫咪",
+      "desc": "了解你的猫咪，我们才能给出更好的建议"
+    },
+    "experience": {
+      "title": "你的养猫经验",
+      "beginner": "新手 - 第一次养猫",
+      "intermediate": "进阶 - 养过一段时间",
+      "experienced": "资深 - 经验丰富"
+    }
+  },
+  "achievements": {
+    "title": "成就系统",
+    "unlocked": "已解锁 {{count}} 个成就",
+    "locked": "未解锁"
+  },
+  "payment": {
+    "title": "会员服务",
+    "premium": {
+      "title": "高级会员",
+      "features": {
+        "unlimited": "无限 AI 问答",
+        "analysis": "健康档案深度分析",
+        "guide": "品种深度指南",
+        "support": "优先客服"
+      }
+    },
+    "subscribe": "立即订阅",
+    "restore": "恢复购买"
+  },
+  "settings": {
+    "title": "设置",
+    "notifications": {
+      "title": "通知设置",
+      "daily": "每日提醒",
+      "tips": "养育小贴士"
+    },
+    "language": {
+      "title": "语言",
+      "zh": "简体中文",
+      "en": "English"
+    },
+    "theme": {
+      "title": "主题",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统"
+    },
+    "about": {
+      "title": "关于",
+      "version": "版本",
+      "feedback": "意见反馈",
+      "privacy": "隐私政策",
+      "terms": "服务条款"
+    }
+  },
+  "errors": {
+    "network": "网络连接失败，请检查网络后重试",
+    "timeout": "请求超时，请重试",
+    "unknown": "发生未知错误，请稍后重试",
+    "notFound": "页面不存在"
+  }
+}

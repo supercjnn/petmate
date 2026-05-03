@@ -1,0 +1,171 @@
+{
+  "common": {
+    "appName": "PetMate",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "noData": "No data"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "ai": "AI Assistant",
+    "profile": "Profile",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "home": {
+    "hero": {
+      "title": "90-Day Cat Care Decision System",
+      "subtitle": "Scientific guide for new cat parents",
+      "cta": "Get Started"
+    },
+    "features": {
+      "title": "Why PetMate",
+      "daily": {
+        "title": "Daily Decision Cards",
+        "desc": "One key decision per day, build good habits in 90 days"
+      },
+      "ai": {
+        "title": "AI Cat Consultant",
+        "desc": "Available 24/7 to answer your questions"
+      },
+      "progress": {
+        "title": "Growth Tracking",
+        "desc": "Track every step of you and your cat"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "day": "Day {{day}}",
+    "progress": "Progress",
+    "todayCard": "Today's Card",
+    "completedActions": "{{count}} actions completed",
+    "noActions": "No actions for today"
+  },
+  "card": {
+    "title": "Decision Card",
+    "complete": "Complete Action",
+    "skip": "Skip",
+    "important": "Important",
+    "tips": "Tips",
+    "resources": "Resources"
+  },
+  "ai": {
+    "title": "AI Cat Consultant",
+    "placeholder": "Ask your question...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "suggestions": {
+      "title": "Popular Questions",
+      "feeding": "How often should I feed my cat?",
+      "water": "My cat doesn't drink water, what should I do?",
+      "sleep": "Is my cat's sleep pattern normal?",
+      "play": "How to play with my cat?"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "myCat": "My Cat",
+    "achievements": "Achievements",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "cat": {
+    "name": "Name",
+    "breed": "Breed",
+    "age": "Age",
+    "birthday": "Birthday",
+    "weight": "Weight",
+    "gender": {
+      "label": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "unknown": "Unknown"
+    },
+    "sterilized": {
+      "label": "Sterilized",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to PetMate",
+      "subtitle": "Let's start your cat care journey"
+    },
+    "catInfo": {
+      "title": "Tell us about your cat",
+      "desc": "Understanding your cat helps us give better advice"
+    },
+    "experience": {
+      "title": "Your Experience",
+      "beginner": "Beginner - First time cat parent",
+      "intermediate": "Intermediate - Some experience",
+      "experienced": "Experienced - Expert level"
+    }
+  },
+  "achievements": {
+    "title": "Achievements",
+    "unlocked": "{{count}} achievements unlocked",
+    "locked": "Locked"
+  },
+  "payment": {
+    "title": "Premium",
+    "premium": {
+      "title": "Premium Member",
+      "features": {
+        "unlimited": "Unlimited AI Q&A",
+        "analysis": "Advanced health analysis",
+        "guide": "Breed guides",
+        "support": "Priority support"
+      }
+    },
+    "subscribe": "Subscribe Now",
+    "restore": "Restore Purchase"
+  },
+  "settings": {
+    "title": "Settings",
+    "notifications": {
+      "title": "Notifications",
+      "daily": "Daily reminder",
+      "tips": "Care tips"
+    },
+    "language": {
+      "title": "Language",
+      "zh": "简体中文",
+      "en": "English"
+    },
+    "theme": {
+      "title": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "about": {
+      "title": "About",
+      "version": "Version",
+      "feedback": "Feedback",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "errors": {
+    "network": "Network error, please check your connection",
+    "timeout": "Request timeout, please retry",
+    "unknown": "An unknown error occurred",
+    "notFound": "Page not found"
+  }
+}

@@ -1,167 +1,263 @@
-// SEO优化配置
-
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 
 // 基础SEO配置
 export const SITE_CONFIG = {
-  name: '宠伴 PetMate',
-  description: '新手养猫前90天，每天一张行动卡。告诉你今天该做什么、不要做什么、哪些信号要警惕。让新手养猫不再焦虑。',
-  url: 'https://petmate-beige.vercel.app',
-  ogImage: '/og-image.png',
-  keywords: [
-    '新手养猫',
-    '养猫攻略',
-    '猫咪养护',
-    '养猫指南',
-    '第一只猫',
-    '猫咪日常',
-    '养猫注意事项',
-    '幼猫喂养',
-    '猫咪适应期',
-    '90天养猫'
-  ],
-  author: 'PetMate',
-  twitter: '@petmate'
-}
-
-// 页面SEO配置
-export const PAGE_SEO: Record<string, { title: string; description: string }> = {
-  '/': {
-    title: '宠伴 PetMate - 新手养猫前90天行动卡',
-    description: '每天一张行动卡，告诉新手养猫人今天该做什么、不要做什么。91天完整计划，品种个性化适配，AI智能问答。'
-  },
-  '/dashboard': {
-    title: '今日行动卡 - 宠伴 PetMate',
-    description: '查看今天的养猫行动卡，了解该做什么、不该做什么、需要观察什么。'
-  },
-  '/breed-select': {
-    title: '选择猫咪品种 - 宠伴 PetMate',
-    description: '选择你的猫咪品种，获取个性化的养护建议和行动卡。'
-  },
-  '/ai-assist': {
-    title: 'AI养猫助手 - 宠伴 PetMate',
-    description: 'AI智能解答养猫问题，基于知识库提供专业建议。'
-  },
-  '/achievements': {
-    title: '我的成就 - 宠伴 PetMate',
-    description: '查看养猫里程碑成就，记录与猫咪的成长历程。'
-  },
-  '/health': {
-    title: '猫咪健康档案 - 宠伴 PetMate',
-    description: '记录猫咪体重、疫苗接种、就医情况，管理猫咪健康。'
-  },
-  '/diary': {
-    title: '养猫日记 - 宠伴 PetMate',
-    description: '记录养猫每一天，导出分享你的养猫故事。'
-  }
-}
-
-// 生成页面Metadata
-export function generatePageMetadata(path: string): Metadata {
-  const pageSEO = PAGE_SEO[path] || PAGE_SEO['/']
+  name: 'PetMate',
+  url: 'https://petmate.cat',
+  description: '新手养猫90天决策系统 - 科学的猫咪养育指南，帮助新手铲屎官轻松养猫',
+  keywords: ['养猫', '新手养猫', '猫咪护理', '猫咪健康', '养猫指南', '铲屎官', 'PetMate'],
+  author: 'PetMate Team',
+  email: 'hello@petmate.cat',
   
-  return {
-    title: pageSEO.title,
-    description: pageSEO.description,
-    keywords: SITE_CONFIG.keywords,
-    authors: [{ name: SITE_CONFIG.author }],
-    creator: SITE_CONFIG.author,
-    
-    openGraph: {
-      type: 'website',
-      locale: 'zh_CN',
-      url: SITE_CONFIG.url + path,
-      siteName: SITE_CONFIG.name,
-      title: pageSEO.title,
-      description: pageSEO.description,
-      images: [
-        {
-          url: SITE_CONFIG.ogImage,
-          width: 1200,
-          height: 630,
-          alt: SITE_CONFIG.name
-        }
-      ]
-    },
-    
-    twitter: {
-      card: 'summary_large_image',
-      title: pageSEO.title,
-      description: pageSEO.description,
-      images: [SITE_CONFIG.ogImage],
-      creator: SITE_CONFIG.twitter
-    },
-    
-    robots: {
+  // 社交媒体
+  social: {
+    wechat: 'PetMateCat',
+    weibo: '@PetMate养猫',
+    xiaohongshu: 'PetMate养猫指南',
+  },
+  
+  // 颜色主题
+  theme: {
+    primary: '#f97316',
+    secondary: '#8b5cf6',
+    background: '#ffffff',
+  }
+} as const
+
+// 默认元数据
+export const defaultMetadata: Metadata = {
+  metadataBase: new URL(SITE_CONFIG.url),
+  title: {
+    default: `${SITE_CONFIG.name} - 新手养猫90天决策系统`,
+    template: `%s | ${SITE_CONFIG.name}`
+  },
+  description: SITE_CONFIG.description,
+  keywords: [...SITE_CONFIG.keywords],
+  authors: [{ name: SITE_CONFIG.author }],
+  creator: SITE_CONFIG.author,
+  publisher: SITE_CONFIG.author,
+  
+  // 图标
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  
+  // Open Graph
+  openGraph: {
+    type: 'website',
+    locale: 'zh_CN',
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
+    title: `${SITE_CONFIG.name} - 新手养猫90天决策系统`,
+    description: SITE_CONFIG.description,
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: SITE_CONFIG.name,
+      },
+    ],
+  },
+  
+  // Twitter
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE_CONFIG.name} - 新手养猫90天决策系统`,
+    description: SITE_CONFIG.description,
+    images: ['/og-image.png'],
+    creator: '@PetMateCat',
+  },
+  
+  // 机器人
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
       index: true,
       follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1
-      }
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
-    
-    alternates: {
-      canonical: SITE_CONFIG.url + path
-    }
+  },
+  
+  // 验证
+  verification: {
+    google: 'google-site-verification-code',
+  },
+  
+  // 分类
+  category: 'pets',
+  classification: 'Pet Care App',
+  
+  // 其他
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+}
+
+// 视口配置
+export const defaultViewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+}
+
+// 页面专用元数据生成
+export function generatePageMetadata(options: {
+  title: string
+  description?: string
+  path?: string
+  image?: string
+}): Metadata {
+  const { title, description, path = '', image } = options
+  
+  return {
+    title,
+    description: description || SITE_CONFIG.description,
+    openGraph: {
+      title: `${title} | ${SITE_CONFIG.name}`,
+      description: description || SITE_CONFIG.description,
+      url: `${SITE_CONFIG.url}${path}`,
+      images: image ? [{ url: image, width: 1200, height: 630 }] : undefined,
+    },
+    twitter: {
+      title: `${title} | ${SITE_CONFIG.name}`,
+      description: description || SITE_CONFIG.description,
+      images: image ? [image] : undefined,
+    },
   }
 }
 
-// 结构化数据 (JSON-LD)
-export function generateStructuredData() {
+// 结构化数据 - Organization
+export function getOrganizationSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    logo: `${SITE_CONFIG.url}/logo.png`,
+    sameAs: [
+      `https://weibo.com/${SITE_CONFIG.social.weibo}`,
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: SITE_CONFIG.email,
+      contactType: 'customer service',
+    },
+  }
+}
+
+// 结构化数据 - WebApplication
+export function getWebApplicationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: SITE_CONFIG.name,
-    description: SITE_CONFIG.description,
     url: SITE_CONFIG.url,
-    applicationCategory: 'LifestyleApplication',
+    description: SITE_CONFIG.description,
+    applicationCategory: 'PetApplication',
     operatingSystem: 'Web',
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'CNY',
-      description: '免费体验前3天，完整版¥29'
     },
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.8',
-      ratingCount: '128',
-      reviewCount: '86'
-    }
+      ratingCount: '1250',
+    },
   }
 }
 
-// 生成站点地图数据
-export function generateSitemap(): string {
-  const pages = Object.keys(PAGE_SEO)
-  const today = new Date().toISOString().split('T')[0]
-  
-  const urls = pages.map(page => `
-  <url>
-    <loc>${SITE_CONFIG.url}${page}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>${page === '/' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${page === '/' ? '1.0' : '0.8'}</priority>
-  </url>`).join('')
-  
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
-</urlset>`
+// 结构化数据 - FAQ
+export function getFAQSchema(faqs: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
 }
 
-// 生成robots.txt
-export function generateRobots(): string {
-  return `User-agent: *
-Allow: /
+// 结构化数据 - HowTo
+export function getHowToSchema(options: {
+  name: string
+  description: string
+  steps: Array<{ name: string; text: string }>
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: options.name,
+    description: options.description,
+    step: options.steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  }
+}
 
-Sitemap: ${SITE_CONFIG.url}/sitemap.xml
+// 结构化数据 - Article
+export function getArticleSchema(options: {
+  title: string
+  description: string
+  publishedTime: string
+  modifiedTime?: string
+  author: string
+  image?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: options.title,
+    description: options.description,
+    datePublished: options.publishedTime,
+    dateModified: options.modifiedTime || options.publishedTime,
+    author: {
+      '@type': 'Person',
+      name: options.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_CONFIG.url}/logo.png`,
+      },
+    },
+    image: options.image,
+  }
+}
 
-# 禁止爬取API
-Disallow: /api/
-`
+// 生成sitemap URL条目
+export function generateSitemapEntry(path: string, options: {
+  lastModified?: Date
+  changeFrequency?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+  priority?: number
+} = {}) {
+  return {
+    url: `${SITE_CONFIG.url}${path}`,
+    lastModified: options.lastModified || new Date(),
+    changeFrequency: options.changeFrequency || 'weekly',
+    priority: options.priority || 0.5,
+  }
 }
