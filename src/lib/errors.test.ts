@@ -32,9 +32,10 @@ describe('Errors Module', () => {
       expect(error.code).toBe(ErrorCode.UNAUTHORIZED)
     })
 
-    it('should create internal error', () => {
-      const error = Errors.internal()
+it('should create internal error', () => {
+      const error = Errors.internal('服务器错误')
       expect(error.code).toBe(ErrorCode.INTERNAL_ERROR)
+      expect(error.userMessage).toBe('服务器错误')
     })
   })
 
