@@ -1,237 +1,182 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { AppLayout } from '@/components/layout'
-import { Button, Card, Badge } from '@/components/ui'
-import { IconShare, IconCopy, IconCheck } from '@/components/icons'
+import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Button, Card, Badge, Spinner } from '@/components/ui'
+import { IconArrowLeft, IconDownload, IconShare, IconCopy, IconCheck } from '@/components/icons'
 import { FadeIn, SlideIn } from '@/components/animations'
-import { 
-  ShareContent, 
-  generateXiaohongshuContent, 
-  copyToClipboard, 
-  trackShare,
-  generateShareLink
-} from '@/lib/share'
-import { ACHIEVEMENTS } from '@/lib/achievements'
+import {
+  ShareCard,
+  generateMilestoneCard,
+  generateAchievementCard,
+  generateDailyCard,
+  generateWeightCard,
+  renderCardToCanvas,
+  downloadCard,
+  shareCard,
+  copyShareText
+} from '@/lib/share-card'
 
-function ShareContentComponent() {
-  const searchParams = useSearchParams()
+export default function SharePage() {
+  const router = useRouter()
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [loading, setLoading] = useState(true)
+  const [card, setCard] = useState<ShareCard | null>(null)
   const [copied, setCopied] = useState(false)
-  const [contentType, setContentType] = useState<ShareContent['type'] | null>(null)
-  const [shareContent, setShareContent] = useState<ShareContent | null>(null)
 
   useEffect(() => {
     // 从URL参数获取分享类型
-    const type = searchParams.get('type') as ShareContent['type']
-    const achievementId = searchParams.get('achievement')
+    const params = new URLSearchParams(window.location.search)
+    const type = params.get('type') || 'milestone'
+    const dayNumber = parseInt(params.get('day') || '1')
+    const catName = params.get('cat') || '小橘'
 
-    if (achievementId) {
-      const achievement = ACHIEVEMENTS.find(a => a.id === achievementId)
-      if (achievement) {
-        setShareContent({
-          type: 'achievement',
-          title: `🎉 解锁成就：${achievement.title}`,
-          message: achievement.description,
-          hashtags: ['养猫', '新手养猫', '猫咪日常', '铲屎官'],
-          gradient: 'from-orange-400 to-pink-500',
-          icon: achievement.icon,
-          data: { achievementId }
-        })
-        setContentType('achievement')
-      }
-    } else if (type) {
-      generateDefaultContent(type)
-    }
-  }, [searchParams])
-
-  const generateDefaultContent = (type: ShareContent['type']) => {
-    const userData = localStorage.getItem('petmate_user')
-    const saved = userData ? JSON.parse(userData) : {}
-    const dayNumber = saved.dayNumber || 1
-
-    let content: ShareContent
+    let shareCard: ShareCard
 
     switch (type) {
-      case 'achievement':
-        content = {
-          type: 'achievement',
-          title: '🎉 我解锁了养猫成就！',
-          message: `已坚持${dayNumber}天，成为更好的铲屎官`,
-          hashtags: ['养猫', '成就', '铲屎官'],
-          gradient: 'from-yellow-400 to-orange-500',
-          icon: '🏆'
-        }
-        break
-      case 'progress':
-        content = {
-          type: 'progress',
-          title: `Day ${dayNumber} | 养猫进度更新`,
-          message: `已坚持${dayNumber}天，每天一点进步`,
-          hashtags: ['养猫', '日常', '坚持'],
-          gradient: 'from-blue-400 to-purple-500',
-          icon: '📅'
-        }
-        break
       case 'milestone':
-        content = {
-          type: 'milestone',
-          title: `🎊 完成第${dayNumber}天！`,
-          message: '感谢有你在身边，每天都是新收获',
-          hashtags: ['养猫', '里程碑', '感谢'],
-          gradient: 'from-green-400 to-teal-500',
-          icon: '🎊'
-        }
+        shareCard = generateMilestoneCard(dayNumber, '完成每日任务', catName)
+        break
+      case 'achievement':
+        shareCard = generateAchievementCard('第一周达成', '坚持7天，养成养猫好习惯', catName)
+        break
+      case 'daily':
+        shareCard = generateDailyCard(dayNumber, '😊 开心', 3, catName)
+        break
+      case 'weight':
+        shareCard = generateWeightCard(catName, 3.5, 'kg', 'stable')
         break
       default:
-        content = {
-          type: 'note',
-          title: '分享我的养猫笔记',
-          message: '记录与猫咪的每个瞬间',
-          hashtags: ['养猫', '笔记', '日常'],
-          gradient: 'from-pink-400 to-red-500',
-          icon: '📝'
-        }
+        shareCard = generateMilestoneCard(dayNumber, '完成每日任务', catName)
     }
 
-    setShareContent(content)
-    setContentType(type)
-  }
+    setCard(shareCard)
+    setLoading(false)
+  }, [])
 
-  const handleShare = (platform: string) => {
-    if (!shareContent) return
+  useEffect(() => {
+    if (card && canvasRef.current) {
+      renderCardToCanvas(card, canvasRef.current)
+    }
+  }, [card])
 
-    trackShare(platform, shareContent.type, shareContent.data?.achievementId)
-
-    // 根据平台处理
-    switch (platform) {
-      case 'xiaohongshu':
-        const xhsContent = generateXiaohongshuContent(shareContent)
-        copyToClipboard(xhsContent.body)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-        break
-      case 'wechat':
-        // 微信分享需要调用微信SDK
-        alert('请截图后分享到微信')
-        break
-      case 'copy':
-        const text = `${shareContent.title}\n\n${shareContent.message}\n\n${shareContent.hashtags.map(h => `#${h}`).join(' ')}`
-        copyToClipboard(text)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-        break
+  const handleDownload = () => {
+    if (card) {
+      downloadCard(card)
     }
   }
 
-  const shareTypes = [
-    { type: 'achievement' as const, label: '成就分享', icon: '🏆', desc: '分享解锁的成就' },
-    { type: 'progress' as const, label: '进度卡片', icon: '📅', desc: '分享我的进度' },
-    { type: 'milestone' as const, label: '里程碑', icon: '🎊', desc: '分享重要时刻' },
-    { type: 'note' as const, label: '养猫笔记', icon: '📝', desc: '分享养猫经验' }
-  ]
+  const handleShare = async () => {
+    if (card) {
+      const shared = await shareCard(card)
+      if (!shared) {
+        handleCopy()
+      }
+    }
+  }
+
+  const handleCopy = () => {
+    if (card) {
+      navigator.clipboard.writeText(copyShareText(card))
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (!card) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">加载失败</p>
+      </div>
+    )
+  }
 
   return (
-    <AppLayout title="分享">
-      <FadeIn>
-        {/* 头部 */}
-        <div className="mb-6">
-          <h1 className="text-xl font-bold mb-2">分享我的养猫之旅</h1>
-          <p className="text-gray-500">选择你想分享的内容类型</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* 顶部导航 */}
+      <div className="sticky top-0 z-40 bg-white border-b">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <button onClick={() => router.back()} className="p-2 -ml-2">
+            <IconArrowLeft className="w-5 h-5" />
+          </button>
+          <h1 className="font-bold">分享卡片</h1>
+          <div className="w-8" />
         </div>
+      </div>
 
-        {/* 分享类型选择 */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {shareTypes.map((item, i) => (
-            <SlideIn key={item.type} delay={i * 50}>
-              <Card
-                hover
-                className={`text-center ${contentType === item.type ? 'ring-2 ring-orange-500' : ''}`}
-                onClick={() => generateDefaultContent(item.type)}
-              >
-                <span className="text-3xl mb-2 block">{item.icon}</span>
-                <p className="font-medium">{item.label}</p>
-                <p className="text-sm text-gray-500">{item.desc}</p>
-              </Card>
+      <div className="p-4">
+        <FadeIn>
+          {/* 卡片预览 */}
+          <Card className="overflow-hidden">
+            <canvas
+              ref={canvasRef}
+              width={600}
+              height={400}
+              className="w-full h-auto"
+              style={{ display: 'block' }}
+            />
+          </Card>
+
+          {/* 分享提示 */}
+          <p className="text-center text-sm text-gray-500 mt-4">
+            长按图片保存到手机相册
+          </p>
+
+          {/* 操作按钮 */}
+          <div className="space-y-3 mt-6">
+            <SlideIn direction="up" delay={100}>
+              <Button onClick={handleDownload} fullWidth size="lg">
+                <IconDownload className="w-5 h-5 mr-2" />
+                保存图片
+              </Button>
             </SlideIn>
-          ))}
-        </div>
 
-        {/* 预览卡片 */}
-        {shareContent && (
-          <SlideIn direction="up">
-            <Card className={`bg-gradient-to-r ${shareContent.gradient} text-white mb-6`}>
-              <div className="text-center">
-                <span className="text-4xl mb-3 block">{shareContent.icon}</span>
-                <h2 className="text-xl font-bold mb-2">{shareContent.title}</h2>
-                <p className="opacity-90 mb-4">{shareContent.message}</p>
-                <div className="flex justify-center gap-2 flex-wrap">
-                  {shareContent.hashtags.map(tag => (
-                    <Badge key={tag} className="bg-white/20 text-white">
-                      #{tag}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
+            <SlideIn direction="up" delay={200}>
+              <Button variant="outline" onClick={handleShare} fullWidth size="lg">
+                <IconShare className="w-5 h-5 mr-2" />
+                分享到微信
+              </Button>
+            </SlideIn>
+
+            <SlideIn direction="up" delay={300}>
+              <Button 
+                variant="ghost" 
+                onClick={handleCopy} 
+                fullWidth
+              >
+                {copied ? (
+                  <>
+                    <IconCheck className="w-4 h-4 mr-2 text-green-500" />
+                    已复制文案
+                  </>
+                ) : (
+                  <>
+                    <IconCopy className="w-4 h-4 mr-2" />
+                    复制分享文案
+                  </>
+                )}
+              </Button>
+            </SlideIn>
+          </div>
+
+          {/* 分享建议 */}
+          <SlideIn direction="up" delay={400}>
+            <Card className="mt-6 bg-blue-50 border border-blue-100">
+              <p className="text-sm text-blue-700">
+                💡 分享建议：可以将卡片分享到小红书、朋友圈或养猫群，记录你和猫咪的成长！
+              </p>
             </Card>
           </SlideIn>
-        )}
-
-        {/* 小红书合规提示 */}
-        {shareContent && (
-          <Card className="mb-6 bg-yellow-50 border border-yellow-200">
-            <p className="text-sm text-yellow-800">
-              <strong>💡 小红书分享提示：</strong>
-              正文只给价值，用户主动问再回复。不要写"评论XX"、"私信领取"等诱导互动内容。
-            </p>
-          </Card>
-        )}
-
-        {/* 分享按钮 */}
-        {shareContent && (
-          <div className="space-y-3">
-            <Button
-              fullWidth
-              size="lg"
-              onClick={() => handleShare('xiaohongshu')}
-            >
-              📱 复制小红书内容
-            </Button>
-            <Button
-              fullWidth
-              size="lg"
-              variant="outline"
-              onClick={() => handleShare('wechat')}
-            >
-              💬 分享到微信
-            </Button>
-            <Button
-              fullWidth
-              variant="ghost"
-              onClick={() => handleShare('copy')}
-            >
-              {copied ? <><IconCheck className="w-4 h-4 mr-2" />已复制</> : <><IconCopy className="w-4 h-4 mr-2" />复制纯文本</>}
-            </Button>
-          </div>
-        )}
-
-        {/* 分享历史 */}
-        <Card className="mt-6">
-          <h3 className="font-bold mb-3">分享记录</h3>
-          <div className="text-center py-4 text-gray-500">
-            <IconShare className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p className="text-sm">分享后将在此显示记录</p>
-          </div>
-        </Card>
-      </FadeIn>
-    </AppLayout>
-  )
-}
-
-export default function SharePage() {
-  return (
-    <Suspense fallback={<div className="flex items-center justify-center h-[60vh]">加载中...</div>}>
-      <ShareContentComponent />
-    </Suspense>
+        </FadeIn>
+      </div>
+    </div>
   )
 }

@@ -1,287 +1,322 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { generateXHSText, diaryTemplate, milestoneTemplate, copyToClipboard } from '@/lib/xiaohongshu'
-
-interface DiaryEntry {
-  dayNumber: number
-  date: string
-  notes: string[]
-  completedActions: string[]
-  stage: string
-}
+import { useRouter } from 'next/navigation'
+import { Button, Card, Badge, Spinner, EmptyState } from '@/components/ui'
+import { IconArrowLeft, IconCalendar, IconCheck, IconHeart, IconEdit } from '@/components/icons'
+import { FadeIn, SlideIn, CountUp } from '@/components/animations'
+import {
+  DiaryEntry,
+  DailyCheckIn,
+  getAllDiaryEntries,
+  getTodayCheckIn,
+  createCheckIn,
+  createDiaryEntry,
+  getStreakDays,
+  getDiaryStats
+} from '@/lib/diary'
 
 export default function DiaryPage() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [todayCheckIn, setTodayCheckIn] = useState<DailyCheckIn | null>(null)
   const [entries, setEntries] = useState<DiaryEntry[]>([])
-  const [filter, setFilter] = useState<string>('all')
-  const [copied, setCopied] = useState(false)
+  const [streak, setStreak] = useState(0)
+  const [stats, setStats] = useState<any>(null)
+  const [showCheckIn, setShowCheckIn] = useState(false)
+  const [showNewEntry, setShowNewEntry] = useState(false)
+  const [dayNumber, setDayNumber] = useState(1)
 
   useEffect(() => {
-    // 加载用户数据
-    const userData = localStorage.getItem('petmate_user')
-    const notesData = localStorage.getItem('petmate_notes')
-    const historyData = localStorage.getItem('petmate_history')
-    
-    if (userData) {
-      const user = JSON.parse(userData)
-      const notes = notesData ? JSON.parse(notesData) : {}
-      const history = historyData ? JSON.parse(historyData) : {}
-      
-      // 生成时间线
-      const timeline: DiaryEntry[] = []
-      
-      for (let day = user.currentDay || 1; day >= 1; day--) {
-        const dayNotes = notes[day] || []
-        const dayActions = history[day] || []
-        
-        if (dayNotes.length > 0 || dayActions.length > 0) {
-          const stage = getStage(day)
-          const date = new Date(user.startDate)
-          date.setDate(date.getDate() + day - 1)
-          
-          timeline.push({
-            dayNumber: day,
-            date: date.toLocaleDateString('zh-CN'),
-            notes: dayNotes.map((n: any) => n.content || n),
-            completedActions: dayActions,
-            stage
-          })
-        }
-      }
-      
-      setEntries(timeline)
-    }
+    loadData()
   }, [])
 
-  const getStage = (day: number): string => {
-    if (day <= 3) return '适应期'
-    if (day <= 14) return '信任建立期'
-    if (day <= 30) return '行为塑造期'
-    if (day <= 60) return '稳定护理期'
-    return '长期优化期'
+  const loadData = () => {
+    const progressStr = localStorage.getItem('petmate-progress-store')
+    if (progressStr) {
+      try {
+        const progress = JSON.parse(progressStr).state
+        setDayNumber(progress.dayNumber || 1)
+      } catch {}
+    }
+
+    setTodayCheckIn(getTodayCheckIn())
+    setEntries(getAllDiaryEntries())
+    setStreak(getStreakDays())
+    setStats(getDiaryStats())
+    setLoading(false)
   }
 
-  const filteredEntries = filter === 'all' 
-    ? entries 
-    : entries.filter(e => e.stage === filter)
-
-  const handleShareXHS = (entry: DiaryEntry) => {
-    const template = diaryTemplate(entry.dayNumber, entry.notes.length > 0 ? entry.notes : entry.completedActions)
-    const text = generateXHSText(template)
-    copyToClipboard(text).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+  const handleCheckIn = (mood: 'happy' | 'neutral' | 'worried' | 'proud') => {
+    const today = new Date().toLocaleDateString('zh-CN')
+    createCheckIn({
+      dayNumber,
+      date: today,
+      completedTasks: [],
+      mood
     })
+    setTodayCheckIn(getTodayCheckIn())
+    setStreak(getStreakDays())
+    setStats(getDiaryStats())
+    setShowCheckIn(false)
   }
 
-  const handleExportAll = () => {
-    const lines: string[] = ['📖 我的养猫90天日记\n']
-    
-    for (const entry of entries) {
-      lines.push(`\n━━━ Day ${entry.dayNumber} · ${entry.stage} ━━━`)
-      lines.push(`日期：${entry.date}`)
-      
-      if (entry.notes.length > 0) {
-        lines.push('\n📝 记录：')
-        entry.notes.forEach(n => lines.push(`  · ${n}`))
-      }
-      
-      if (entry.completedActions.length > 0) {
-        lines.push('\n✅ 完成的行动：')
-        entry.completedActions.forEach(a => lines.push(`  · ${a}`))
-      }
-    }
-    
-    lines.push('\n\n——来自宠伴 PetMate')
-    
-    const text = lines.join('\n')
-    
-    // 创建打印窗口
-    const printWindow = window.open('', '_blank')
-    if (printWindow) {
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>养猫日记</title>
-          <style>
-            body { 
-              font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-              padding: 40px;
-              max-width: 600px;
-              margin: 0 auto;
-              background: #FFF8E7;
-            }
-            h1 { color: #5D4037; text-align: center; }
-            .day { 
-              margin: 30px 0; 
-              padding: 20px;
-              background: white;
-              border-radius: 10px;
-            }
-            .day-title { 
-              font-weight: bold; 
-              font-size: 18px;
-              color: #FF6B6B;
-              border-bottom: 2px solid #FFD700;
-              padding-bottom: 10px;
-            }
-            .note { margin: 10px 0; color: #333; }
-            .footer { text-align: center; color: #999; margin-top: 40px; }
-          </style>
-        </head>
-        <body>
-          <h1>🐱 我的养猫90天日记</h1>
-          ${entries.map(e => `
-            <div class="day">
-              <div class="day-title">Day ${e.dayNumber} · ${e.stage} · ${e.date}</div>
-              ${e.notes.length > 0 ? `<div class="note">${e.notes.map(n => `📝 ${n}`).join('</div><div class="note">')}</div>` : ''}
-              ${e.completedActions.length > 0 ? `<div class="note" style="color: #4CAF50;">${e.completedActions.map(a => `✅ ${a}`).join('</div><div class="note" style="color: #4CAF50;">')}</div>` : ''}
-            </div>
-          `).join('')}
-          <div class="footer">宠伴 PetMate · 守护养猫前90天</div>
-        </body>
-        </html>
-      `)
-      printWindow.document.close()
-      printWindow.print()
-    }
+  const handleAddEntry = (type: DiaryEntry['type'], content: string) => {
+    const today = new Date().toLocaleDateString('zh-CN')
+    createDiaryEntry({
+      dayNumber,
+      date: today,
+      type,
+      content
+    })
+    setEntries(getAllDiaryEntries())
+    setStats(getDiaryStats())
+    setShowNewEntry(false)
   }
 
-  const stats = {
-    totalNotes: entries.reduce((sum, e) => sum + e.notes.length, 0),
-    totalDays: entries.length,
-    milestones: entries.filter(e => [7, 15, 30, 60, 90].includes(e.dayNumber)).length
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  const moodEmoji: Record<string, string> = {
+    happy: '😊',
+    neutral: '😐',
+    worried: '😟',
+    proud: '😎'
   }
 
   return (
-    <div className="min-h-screen pb-20">
-      {/* 头部 */}
-      <header className="bg-gradient-to-r from-petmate-primary to-petmate-secondary text-white sticky top-0 z-10 px-4 py-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Link href="/dashboard" className="text-white/80">←</Link>
-          <h1 className="font-semibold text-lg">养猫日记</h1>
-        </div>
-        
-        {/* 统计概览 */}
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold">{stats.totalNotes}</div>
-            <div className="text-sm text-white/80">条记录</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold">{stats.totalDays}</div>
-            <div className="text-sm text-white/80">天有记录</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold">{stats.milestones}</div>
-            <div className="text-sm text-white/80">个里程碑</div>
-          </div>
-        </div>
-      </header>
-
-      {/* 筛选器 */}
-      <div className="px-4 py-3 bg-white border-b sticky top-[140px] z-10">
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap ${
-              filter === 'all' ? 'bg-petmate-primary text-white' : 'bg-gray-100'
-            }`}
-          >
-            全部
+    <div className="min-h-screen bg-gray-50">
+      {/* 顶部导航 */}
+      <div className="sticky top-0 z-40 bg-white border-b">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <button onClick={() => router.back()} className="p-2 -ml-2">
+            <IconArrowLeft className="w-5 h-5" />
           </button>
-          {['适应期', '信任建立期', '行为塑造期', '稳定护理期', '长期优化期'].map(s => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap ${
-                filter === s ? 'bg-petmate-primary text-white' : 'bg-gray-100'
-              }`}
-            >
-              {s}
-            </button>
-          ))}
+          <h1 className="font-bold">养猫日记</h1>
+          <button onClick={() => setShowNewEntry(true)} className="p-2 -mr-2">
+            <IconEdit className="w-5 h-5 text-orange-500" />
+          </button>
         </div>
       </div>
 
-      {/* 时间线 */}
-      <div className="px-4 py-4">
-        {filteredEntries.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-4xl mb-4">📝</div>
-            <p className="text-gray-500">还没有记录</p>
-            <Link href="/dashboard" className="text-sm text-petmate-primary mt-2 block">
-              去记录今天
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredEntries.map(entry => (
-              <div key={entry.dayNumber} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                {/* Day 头部 */}
-                <div className="px-4 py-3 bg-gradient-to-r from-petmate-light to-petmate-bg flex items-center justify-between">
-                  <div>
-                    <span className="font-bold text-petmate-primary">Day {entry.dayNumber}</span>
-                    <span className="text-sm text-gray-500 ml-2">{entry.stage}</span>
-                    <div className="text-xs text-gray-400">{entry.date}</div>
-                  </div>
-                  <button
-                    onClick={() => handleShareXHS(entry)}
-                    className="text-xs bg-red-500 text-white px-3 py-1 rounded-full"
-                  >
-                    小红书分享
-                  </button>
-                </div>
-                
-                {/* 内容 */}
-                <div className="p-4">
-                  {entry.notes.length > 0 && (
-                    <div className="mb-3">
-                      <p className="text-xs text-gray-400 mb-1">📝 笔记</p>
-                      {entry.notes.map((n, i) => (
-                        <p key={i} className="text-sm text-gray-700">{n}</p>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {entry.completedActions.length > 0 && (
-                    <div>
-                      <p className="text-xs text-gray-400 mb-1">✅ 完成</p>
-                      <div className="flex flex-wrap gap-1">
-                        {entry.completedActions.map((a, i) => (
-                          <span key={i} className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                            {a}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+      <div className="p-4 space-y-4">
+        {/* 打卡统计 */}
+        <FadeIn>
+          <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-white/80 text-sm">连续打卡</p>
+                <p className="text-4xl font-bold">{streak}天</p>
+              </div>
+              <div className="text-5xl">🔥</div>
+            </div>
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/20">
+              <div className="text-center">
+                <p className="text-xl font-bold">{stats?.totalEntries || 0}</p>
+                <p className="text-xs text-white/70">日记条数</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xl font-bold">{stats?.totalCheckIns || 0}</p>
+                <p className="text-xs text-white/70">打卡次数</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xl font-bold">{stats?.byMood?.happy || 0}</p>
+                <p className="text-xs text-white/70">开心天数</p>
+              </div>
+            </div>
+          </Card>
+        </FadeIn>
+
+        {/* 今日打卡 */}
+        {!todayCheckIn ? (
+          <FadeIn delay={50}>
+            <Card>
+              <div className="text-center py-4">
+                <p className="font-medium mb-4">今天 Day {dayNumber}，来打个卡吧！</p>
+                <div className="flex justify-center gap-4">
+                  {[
+                    { mood: 'happy', emoji: '😊', label: '开心' },
+                    { mood: 'neutral', emoji: '😐', label: '一般' },
+                    { mood: 'worried', emoji: '😟', label: '担心' },
+                    { mood: 'proud', emoji: '😎', label: '骄傲' }
+                  ].map(item => (
+                    <button
+                      key={item.mood}
+                      onClick={() => handleCheckIn(item.mood as any)}
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-50 transition-all"
+                    >
+                      <span className="text-2xl">{item.emoji}</span>
+                      <span className="text-xs text-gray-500">{item.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
+            </Card>
+          </FadeIn>
+        ) : (
+          <FadeIn delay={50}>
+            <Card className="bg-green-50 border border-green-100">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-2xl">
+                  {moodEmoji[todayCheckIn.mood]}
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-green-700">今日已打卡</p>
+                  <p className="text-sm text-green-600">
+                    Day {todayCheckIn.dayNumber} · {todayCheckIn.date}
+                  </p>
+                </div>
+                <IconCheck className="w-6 h-6 text-green-500" />
+              </div>
+            </Card>
+          </FadeIn>
+        )}
+
+        {/* 快捷操作 */}
+        <FadeIn delay={100}>
+          <div className="grid grid-cols-2 gap-3">
+            <Card 
+              hover 
+              onClick={() => handleAddEntry('observation', '')}
+              className="text-center py-4"
+            >
+              <span className="text-3xl mb-2 block">👀</span>
+              <p className="text-sm font-medium">观察记录</p>
+            </Card>
+            <Card 
+              hover 
+              onClick={() => handleAddEntry('photo', '')}
+              className="text-center py-4"
+            >
+              <span className="text-3xl mb-2 block">📸</span>
+              <p className="text-sm font-medium">照片日记</p>
+            </Card>
+          </div>
+        </FadeIn>
+
+        {/* 日记列表 */}
+        {entries.length > 0 ? (
+          <div className="space-y-3">
+            <h3 className="font-bold text-gray-700">最近日记</h3>
+            {entries.slice(0, 20).map((entry, index) => (
+              <SlideIn direction="up" delay={index * 30} key={entry.id}>
+                <Card>
+                  <div className="flex items-start gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${
+                      entry.type === 'observation' ? 'bg-blue-100' :
+                      entry.type === 'photo' ? 'bg-pink-100' :
+                      entry.type === 'milestone' ? 'bg-yellow-100' :
+                      'bg-gray-100'
+                    }`}>
+                      {entry.type === 'observation' ? '👀' :
+                       entry.type === 'photo' ? '📸' :
+                       entry.type === 'milestone' ? '🏆' :
+                       '📝'}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge size="sm" variant="default">Day {entry.dayNumber}</Badge>
+                        <span className="text-xs text-gray-400">{entry.date}</span>
+                      </div>
+                      <p className="text-gray-700">{entry.content || '点击查看详情'}</p>
+                    </div>
+                  </div>
+                </Card>
+              </SlideIn>
             ))}
           </div>
+        ) : (
+          <FadeIn>
+            <EmptyState
+              icon={<IconCalendar className="w-12 h-12" />}
+              title="还没有日记"
+              description="开始记录你的养猫日常吧"
+              action={
+                <Button onClick={() => setShowNewEntry(true)}>写第一篇日记</Button>
+              }
+            />
+          </FadeIn>
         )}
       </div>
 
-      {/* 导出按钮 */}
-      <div className="fixed bottom-20 right-6 flex flex-col gap-3">
-        <button
-          onClick={handleExportAll}
-          className="w-14 h-14 bg-petmate-primary text-white rounded-full shadow-lg flex items-center justify-center"
-          title="导出全部"
-        >
-          📄
-        </button>
-      </div>
-
-      {/* 复制成功提示 */}
-      {copied && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-6 py-3 rounded-lg z-50">
-          ✓ 已复制到剪贴板
-        </div>
+      {/* 新建日记弹窗 */}
+      {showNewEntry && (
+        <NewEntryModal
+          onClose={() => setShowNewEntry(false)}
+          onSubmit={handleAddEntry}
+        />
       )}
+    </div>
+  )
+}
+
+function NewEntryModal({
+  onClose,
+  onSubmit
+}: {
+  onClose: () => void
+  onSubmit: (type: DiaryEntry['type'], content: string) => void
+}) {
+  const [type, setType] = useState<DiaryEntry['type']>('note')
+  const [content, setContent] = useState('')
+
+  const handleSubmit = () => {
+    if (content.trim()) {
+      onSubmit(type, content)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-4">
+      <SlideIn direction="up">
+        <Card className="w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl">
+          <h2 className="text-lg font-bold mb-4">写日记</h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">类型</label>
+              <div className="flex gap-2">
+                {[
+                  { value: 'observation', label: '观察', emoji: '👀' },
+                  { value: 'note', label: '笔记', emoji: '📝' },
+                  { value: 'milestone', label: '里程碑', emoji: '🏆' }
+                ].map(t => (
+                  <button
+                    key={t.value}
+                    onClick={() => setType(t.value as any)}
+                    className={`flex-1 py-2 rounded-lg text-sm ${
+                      type === t.value ? 'bg-orange-100 text-orange-700 border-2 border-orange-500' : 'bg-gray-100'
+                    }`}
+                  >
+                    {t.emoji} {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">内容</label>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="记录今天和猫咪的故事..."
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-orange-500"
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-6">
+            <Button variant="ghost" onClick={onClose} fullWidth>取消</Button>
+            <Button onClick={handleSubmit} fullWidth disabled={!content.trim()}>保存</Button>
+          </div>
+        </Card>
+      </SlideIn>
     </div>
   )
 }

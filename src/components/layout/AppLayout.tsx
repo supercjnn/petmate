@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useState } from 'react'
-import { IconHome, IconDashboard, IconAI, IconUser, IconSettings, IconCat } from '@/components/icons'
+import { IconHome, IconDashboard, IconAI, IconUser, IconSettings, IconCat, IconCalendar, IconHeart } from '@/components/icons'
 
 interface AppLayoutProps {
   children: ReactNode
@@ -16,9 +16,9 @@ export function AppLayout({ children, title, hideNav = false }: AppLayoutProps) 
   const [showSettings, setShowSettings] = useState(false)
 
   const navItems = [
-    { href: '/', label: '首页', icon: IconHome },
-    { href: '/dashboard', label: 'Dashboard', icon: IconDashboard },
-    { href: '/ai-chat', label: 'AI问答', icon: IconAI },
+    { href: '/dashboard', label: '今日', icon: IconHome },
+    { href: '/health', label: '猫咪', icon: IconCat },
+    { href: '/diary', label: '日记', icon: IconCalendar },
     { href: '/profile', label: '我的', icon: IconUser },
   ]
 
