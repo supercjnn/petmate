@@ -4,21 +4,28 @@
  */
 
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Button, Card, Badge } from '@/components/ui'
+
+// 服务端检查是否已登录
+function checkLoggedIn() {
+  // 在客户端会由page组件处理
+  return null
+}
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 via-white to-secondary-50">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50">
       {/* 导航栏 */}
       <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🐱</span>
-            <span className="font-bold text-lg">宠伴</span>
+            <span className="font-bold text-lg">宠伴 PetMate</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">
-              登录
+            <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
+              进入应用
             </Link>
             <Link href="/onboarding">
               <Button size="sm">立即开始</Button>
@@ -32,21 +39,21 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-4 py-16 md:py-24">
           <div className="text-center">
             {/* 标题 */}
-            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm mb-6">
+            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-sm mb-6">
               <span>✨</span>
-              <span>已帮助 10,000+ 新手铲屎官</span>
+              <span>新手养猫90天决策系统</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
               新手养猫前90天
               <br />
-              <span className="text-primary-600">每天到底该做什么？</span>
+              <span className="text-orange-600">每天到底该做什么？</span>
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               每天一张行动卡，告诉你今天该做什么、不要做什么、哪些信号要警惕。
               <br />
-              <span className="text-primary-600 font-medium">少焦虑、少踩坑、少花冤枉钱</span>
+              <span className="text-orange-600 font-medium">少焦虑、少踩坑、少花冤枉钱</span>
             </p>
 
             {/* CTA按钮 */}
